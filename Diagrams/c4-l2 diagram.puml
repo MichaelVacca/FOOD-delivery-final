@@ -1,0 +1,13 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
+title System Context Diagram for Food Delivery Application System
+System(system1, "Food Delivery Application ", "The food delivery application system")
+System(system2, "Client Service", "Allows employees of a restaurant to view their menus, and manage their orders.")
+System(system3, "Delivery Driver Service", "Allows employees of a restaurant to view their menus, and manage their orders.")
+System(system4, "Restaurant Service", "Allows employees of a restaurant to view their menus, and manage their orders.")
+
+Rel(system1, system2, "Management of a restaurants clients")
+Rel(system1, system3, "Management of the delivery drivers for the restaurants.")
+Rel(system1, system4, "Ability to manage the restaurants, menus within that restaurant and the items in those menus")
+SHOW_LEGEND()
+@enduml

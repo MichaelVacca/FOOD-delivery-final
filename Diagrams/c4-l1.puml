@@ -1,0 +1,8 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
+title System Context Diagram for a Food Delivery  System
+Person(employee, "Employee", "An employee of a restaurant.")
+System(system, "FoodDeliveryApplication", "Allows employees of a restaurant to view their menus, and manage their orders.")
+Rel(employee, system, "Tracks inventory and customer purchases using")
+SHOW_LEGEND()
+@enduml

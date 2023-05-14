@@ -1,0 +1,42 @@
+# Default Spring Profile
+server:
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com.com.fooddelivery: DEBUG
+
+app:
+  restaurant-service:
+    host: localhost
+    port: 7001
+  clients-service:
+    host: localhost
+    port: 7002
+  deliverydriver-service:
+    host: localhost
+    port: 7003
+
+# mandatory
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+# for docker
+server:
+  port: 8080
+
+app:
+  restaurant-service:
+    host: restaurant-service
+    port: 8080
+  clients-service:
+    host: clients-service
+    port: 8080
+  deliverydriver-service:
+    host: deliverydriver-service
+    port: 8080
