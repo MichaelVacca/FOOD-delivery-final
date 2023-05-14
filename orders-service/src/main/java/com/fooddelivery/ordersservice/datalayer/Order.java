@@ -20,22 +20,22 @@ public class Order {
     @Id
     private String id;
 
-    private OrderIdentifier orderIdentifier;
-    private RestaurantIdentifier restaurantIdentifier;
-    private MenuIdentifier menuIdentifier;
-    private ClientIdentifier clientIdentifier;
-    private DeliveryDriverIdentifier deliveryDriverIdentifier;
-    private String driverFirstName;
-    private String driverLastName;
-    private String clientUsername;
-    private String clientEmail;
-    private List<Items> items;
-    private String restaurantName;
-    private String typeOfMenu;
-    private OrderStatus orderStatus;
-    private Double finalPrice;
-    private String estimatedDeliveryTime;
-    private LocalDate orderDate;
+     public OrderIdentifier orderIdentifier;
+    public RestaurantIdentifier restaurantIdentifier;
+    public MenuIdentifier menuIdentifier;
+    public ClientIdentifier clientIdentifier;
+    public DeliveryDriverIdentifier deliveryDriverIdentifier;
+    public String driverFirstName;
+    public String driverLastName;
+    public String clientUsername;
+    public String clientEmail;
+    public List<Items> items;
+    public String restaurantName;
+    public String typeOfMenu;
+    public OrderStatus orderStatus;
+    public Double finalPrice;
+    public String estimatedDeliveryTime;
+    public LocalDate orderDate;
 
 }
 

@@ -4,9 +4,7 @@ import com.fooddelivery.ordersservice.businesslayer.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +18,14 @@ public class OrderController {
     @GetMapping
     ResponseEntity<List<OrderResponseModel>> getAllOrders() {
         return ResponseEntity.ok().body(orderService.getAllOrders());
+    }
+    @GetMapping("/{orderId}")
+    ResponseEntity<OrderResponseModel> getOrderById(@PathVariable  String orderId) {
+        return ResponseEntity.ok().body(orderService.getOrderById(orderId));
+    }
+    @DeleteMapping("/{orderId}")
+    ResponseEntity<Void> deleteOrder(@PathVariable String orderId) {
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.noContent().build();
     }
 }

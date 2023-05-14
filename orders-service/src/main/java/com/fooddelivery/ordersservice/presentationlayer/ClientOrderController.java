@@ -22,4 +22,9 @@ public class ClientOrderController {
                 .body(orderService.processClientOrders(orderRequestModel, clientId));
 
     }
+    @PutMapping("/{orderId}")
+    ResponseEntity<OrderResponseModel> updateClientOrder(@PathVariable String clientId,@PathVariable String orderId, @RequestBody OrderRequestModel orderRequestModel) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(orderService.updateClientOrder(clientId, orderId, orderRequestModel));
+    }
 }
