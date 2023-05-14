@@ -18,6 +18,9 @@ app:
   deliverydriver-service:
     host: localhost
     port: 7003
+  orders-service:
+    host: localhost
+    port: 7004
 
 # mandatory
 ---
@@ -39,4 +42,7 @@ app:
     port: 8080
   deliverydriver-service:
     host: deliverydriver-service
+    port: 8080
+  orders-service:
+    host: orders-service
     port: 8080
