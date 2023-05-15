@@ -2,6 +2,7 @@ package com.fooddelivery.ordersservice.utils;
 
 
 import com.fooddelivery.ordersservice.utils.exceptions.InvalidInputException;
+import com.fooddelivery.ordersservice.utils.exceptions.NoItemsException;
 import com.fooddelivery.ordersservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,8 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -28,6 +28,11 @@ public class GlobalControllerExceptionHandler {
     public HttpErrorInfo handleInvalidInputException (WebRequest request, Exception ex){
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
 
+    }
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(NoItemsException.class)
+    public HttpErrorInfo handleNoItemsException(WebRequest request, Exception ex){
+        return createHttpErrorInfo(BAD_REQUEST, request, ex);
     }
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {

@@ -20,8 +20,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -50,6 +49,47 @@ class ClientOrderControllerTest {
     @BeforeEach
     public void setUp() {
         baseUrlClients = baseUrlClients + port + "api/v1/clients/";
+    }
+
+    @Test
+    public void getAllClientOrdersTest() throws Exception {
+        String clientId = "client1";
+        OrderResponseModel[] orders = new OrderResponseModel[] {}; // setup your orders
+
+        when(orderServiceClient.getAllOrdersAggregateByClientId(clientId)).thenReturn(orders);
+
+        mockMvc.perform(get("/api/v1/clients/" + clientId + "/orders"))
+                .andExpect(status().isOk());
+
+        verify(orderServiceClient, times(1)).getAllOrdersAggregateByClientId(clientId);
+    }
+
+
+    @Test
+    public void getClientOrderByIdTest() throws Exception {
+        String clientId = "client1";
+        String orderId = "order1";
+        OrderResponseModel orderResponseModel = new OrderResponseModel(); // setup your orderResponseModel
+
+        when(orderServiceClient.getOrderByOrderIdAndByClientId(clientId, orderId)).thenReturn(orderResponseModel);
+
+        mockMvc.perform(get("/api/v1/clients/" + clientId + "/orders/" + orderId))
+                .andExpect(status().isOk());
+
+        verify(orderServiceClient, times(1)).getOrderByOrderIdAndByClientId(clientId, orderId);
+    }
+
+    @Test
+    public void deleteOrderByIdTest() throws Exception {
+        String clientId = "client1";
+        String orderId = "order1";
+
+        doNothing().when(orderServiceClient).deleteClientOrder(clientId, orderId);
+
+        mockMvc.perform(delete("/api/v1/clients/" + clientId + "/orders/" + orderId))
+                .andExpect(status().isNoContent());
+
+        verify(orderServiceClient, times(1)).deleteClientOrder(clientId, orderId);
     }
 
     @Test

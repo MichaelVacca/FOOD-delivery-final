@@ -10,6 +10,7 @@ import com.fooddelivery.ordersservice.domainClientLayer.deliveryDriver.DeliveryD
 import com.fooddelivery.ordersservice.domainClientLayer.deliveryDriver.DeliveryDriverServiceClient;
 import com.fooddelivery.ordersservice.presentationlayer.OrderRequestModel;
 import com.fooddelivery.ordersservice.presentationlayer.OrderResponseModel;
+import com.fooddelivery.ordersservice.utils.exceptions.NoItemsException;
 import com.fooddelivery.ordersservice.utils.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,6 +96,15 @@ public class OrderServiceImpl implements OrderService {
                 .totalPrice(orderRequestModel.getTotalPrice())
                 .build();
 
+            if (orderRequestModel.getItems() == null) {
+                throw new NoItemsException("No items in order");
+            }
+            if (orderRequestModel.getItems().isEmpty()) {
+                throw new NoItemsException("No items in order");
+            }
+
+
+
                 restaurantServiceClient.modifyMenuInRestaurant(menuRequestModel.getRestaurantId(), menuRequestModel.getMenuId(),menuRequestModel);
                 return orderResponseModelMapper.entityToResponseModel(saved);
 
@@ -107,6 +117,21 @@ public class OrderServiceImpl implements OrderService {
         }
         return orderResponseModelMapper.entityToResponseModel(order);
     }
+    @Override
+    public List<OrderResponseModel> getAllOrdersAggregateByClientId(String clientId) {
+        List<Order> orders = ordersRepository.findAllOrdersByClientIdentifier_ClientId(clientId);
+
+        return orderResponseModelMapper.entityToResponseModelList(orders);
+    }
+
+    @Override
+    public OrderResponseModel getOrderByOrderIdAndByClientId(String clientId, String orderId) {
+        Order order = ordersRepository.findOrderByClientIdentifier_ClientIdAndOrderIdentifier_OrderId(clientId,orderId);
+
+        return orderResponseModelMapper.entityToResponseModel(order);
+    }
+
+
 
     @Override
     public void deleteOrder(String orderId) {
@@ -115,6 +140,15 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException("Order not found with id : " + orderId);
         }
         ordersRepository.delete(order);
+    }
+
+    @Override
+    public void deleteOrderByIdAndClientId(String clientId, String orderId) {
+        Order orders = ordersRepository.findOrderByClientIdentifier_ClientIdAndOrderIdentifier_OrderId(clientId,orderId);
+        if (orders == null) {
+            throw new NotFoundException("Order not found with id : " + orderId);
+        }
+        ordersRepository.delete(orders);
     }
 
     @Override

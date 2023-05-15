@@ -3,8 +3,8 @@ package com.fooddelivery.apigateway.domainClientLayer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fooddelivery.apigateway.presentationLayer.OrderRequestModel;
 import com.fooddelivery.apigateway.presentationLayer.OrderResponseModel;
-import com.fooddelivery.apigateway.presentationLayer.RestaurantRequestModel;
 import com.fooddelivery.apigateway.utils.HttpErrorInfo;
+import com.fooddelivery.apigateway.utils.exceptions.NoItemsException;
 import com.fooddelivery.apigateway.utils.exceptions.InvalidInputException;
 import com.fooddelivery.apigateway.utils.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @Component
@@ -55,6 +54,36 @@ public class OrderServiceClient {
         return orderResponseModels;
     }
 
+    public OrderResponseModel[] getAllOrdersAggregateByClientId(String clientId) {
+        OrderResponseModel[] orderResponseModels;
+        try{
+            String url = ORDER_CLIENT_BASE_URL + "/" + clientId + "/orders";
+            orderResponseModels =  restTemplate.getForObject(url, OrderResponseModel[].class);
+            log.debug("5. Received in API-Gateway Order Service Client getAllOrdersAggregateByClientId");
+        }
+        catch(HttpClientErrorException ex){
+            log.debug("5.");
+            throw handleHttpClientException(ex);
+        }
+        return orderResponseModels;
+    }
+
+    public OrderResponseModel getOrderByOrderIdAndByClientId(String clientId, String orderId) {
+        OrderResponseModel orderResponseModel;
+        try{
+            String url = ORDER_CLIENT_BASE_URL + "/" + clientId + "/orders/" + orderId;
+            orderResponseModel =  restTemplate.getForObject(url, OrderResponseModel.class);
+            log.debug("6. Received in API-Gateway Order Service Client getOrderByOrderIdAndByClientId");
+        }
+        catch(HttpClientErrorException ex){
+            log.debug("6.");
+            throw handleHttpClientException(ex);
+        }
+        return orderResponseModel;
+    }
+
+
+
     public OrderResponseModel getOrderById(String orderId){
         OrderResponseModel orderResponseModel;
         try{
@@ -69,10 +98,18 @@ public class OrderServiceClient {
         return orderResponseModel;
     }
     public OrderResponseModel processClientOrders(OrderRequestModel orderRequestModel, String clientId) {
+
         OrderResponseModel orderResponseModel;
-        String url = ORDER_CLIENT_BASE_URL + "/" + clientId + "/orders";
-        orderResponseModel =
-                restTemplate.postForObject(url, orderRequestModel, OrderResponseModel.class);
+        try {
+
+            String url = ORDER_CLIENT_BASE_URL + "/" + clientId + "/orders";
+            orderResponseModel =
+                    restTemplate.postForObject(url, orderRequestModel, OrderResponseModel.class);
+        }
+        catch (HttpClientErrorException ex) {
+            log.debug("7.");
+            throw handleHttpClientException(ex);
+        }
         return orderResponseModel;
     }
     public void updateClientOrder(String clientId, String orderId, OrderRequestModel orderRequestModel){
@@ -99,6 +136,18 @@ public class OrderServiceClient {
         }
     }
 
+    public void deleteClientOrder(String clientId, String orderId){
+        try{
+            String url = ORDER_CLIENT_BASE_URL + "/" + clientId + "/orders/" + orderId;
+            restTemplate.execute(url, HttpMethod.DELETE, requestCallback(null),   null);
+            log.debug("8. Received in API-Gateway Order Service Client deleteClientOrder");
+        }
+        catch(HttpClientErrorException ex){
+            log.debug("8.");
+            throw handleHttpClientException(ex);
+        }
+    }
+
     private RequestCallback requestCallback(final OrderRequestModel orderRequestModel) {
         return clientHttpRequest -> {
             ObjectMapper mapper = new ObjectMapper();
@@ -117,6 +166,9 @@ public class OrderServiceClient {
         }
         if (ex.getStatusCode() == UNPROCESSABLE_ENTITY) {
             return new InvalidInputException(getErrorMessage(ex));
+        }
+        if(ex.getStatusCode() == BAD_REQUEST){
+            return new NoItemsException(getErrorMessage(ex));
         }
         log.warn("Got a unexpected HTTP error: {}, will rethrow it", ex.getStatusCode());
         log.warn("Error body: {}", ex.getResponseBodyAsString());

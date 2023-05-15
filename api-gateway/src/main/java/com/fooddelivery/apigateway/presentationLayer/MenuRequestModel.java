@@ -19,12 +19,12 @@ public class MenuRequestModel {
     public MenuRequestModel() {
     }
 
-    public MenuRequestModel(String menuId, String restaurantId, String typeOfMenu, List<Items> items) {
+/*    public MenuRequestModel(String menuId, String restaurantId, String typeOfMenu, List<Items> items) {
         this.menuId = menuId;
         this.restaurantId = restaurantId;
         this.typeOfMenu = typeOfMenu;
         this.items = items;
-    }
+    }*/
 
     public MenuRequestModel(String menuId, String restaurantId, String typeOfMenu) {
         this.menuId = menuId;

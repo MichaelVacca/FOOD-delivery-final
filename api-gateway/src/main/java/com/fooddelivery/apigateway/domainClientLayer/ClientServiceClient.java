@@ -18,8 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @Component
@@ -122,6 +121,7 @@ public void deleteClient(String clientId) {
         if (ex.getStatusCode() == UNPROCESSABLE_ENTITY) {
             return new InvalidInputException(getErrorMessage(ex));
         }
+
         return ex;
     }
 

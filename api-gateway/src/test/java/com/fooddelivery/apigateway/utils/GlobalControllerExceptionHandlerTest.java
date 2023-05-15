@@ -1,9 +1,6 @@
 package com.fooddelivery.apigateway.utils;
 
-import com.fooddelivery.apigateway.utils.exceptions.DuplicateIDException;
-import com.fooddelivery.apigateway.utils.exceptions.DuplicateUserNameException;
-import com.fooddelivery.apigateway.utils.exceptions.InvalidInputException;
-import com.fooddelivery.apigateway.utils.exceptions.NotFoundException;
+import com.fooddelivery.apigateway.utils.exceptions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.WebRequest;
@@ -72,6 +69,18 @@ class GlobalControllerExceptionHandlerTest {
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, errorInfo.getHttpStatus());
         assertEquals("test/path", errorInfo.getPath());
         assertEquals("Duplicate username", errorInfo.getMessage());
+    }
+    @Test
+    public void testNoItemsException() {
+        WebRequest request = mock(WebRequest.class);
+        when(request.getDescription(false)).thenReturn("test/path");
+        NoItemsException ex = new NoItemsException("No items");
+
+        HttpErrorInfo errorInfo = handler.handleNoItemsException(request, ex);
+
+        assertEquals(HttpStatus.BAD_REQUEST, errorInfo.getHttpStatus());
+        assertEquals("test/path", errorInfo.getPath());
+        assertEquals("No items", errorInfo.getMessage());
     }
 
 }

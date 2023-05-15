@@ -49,28 +49,7 @@ public class restaurantServiceImpl implements RestaurantService {
         return restaurantResponseMapper.entityToResponseModel(savedRestaurant);
     }
 
-/*    @Override
-    public Restaurant addRestaurant(Restaurant newRestaurant) {
-        return restaurantRepository.save(newRestaurant);
-    }*/
 
-/*    @Override
-    public RestaurantResponseModel updateRestaurant(RestaurantRequestModel restaurantRequestModel, String restaurantId) {
-
-        Restaurant existingRestaurant = restaurantRepository.findByRestaurantIdentifier_RestaurantId(restaurantId);
-        Restaurant restaurant = restaurantRequestMapper.requestModelToEntity(restaurantRequestModel);
-
-        if(existingRestaurant == null){
-            throw new NotFoundException("Restaurant with id: " + restaurantId +" not found.");
-        }
-
-        restaurant.setId(existingRestaurant.getId());
-        restaurant.setRestaurantIdentifier( existingRestaurant.getRestaurantIdentifier());
-        Restaurant restaurantToUpdate = restaurantRepository.save(restaurant);
-
-        return restaurantResponseMapper.entityToResponseModel(restaurantRepository.save(restaurantToUpdate));
-
-    }*/
 
     @Override
     public RestaurantResponseModel updateRestaurant(RestaurantRequestModel restaurantRequestModel, String restaurantId) {
@@ -96,27 +75,6 @@ public class restaurantServiceImpl implements RestaurantService {
     }
 
 
-/*    @Override
-    public RestaurantResponseModel addRestaurant(RestaurantRequestModel restaurantRequestModel) {
-        Restaurant restaurant = restaurantRequestMapper.requestModelToEntity(restaurantRequestModel);
-        Restaurant saved = restaurantRepository.save(restaurant);
-        return restaurantResponseMapper.entityToResponseModel(saved);
-    }*/
-
-/*    @Override
-    public Restaurant updateRestaurant(Restaurant restaurant, String restaurantId) {
-        Restaurant existingRestaurant = restaurantRepository.findByRestaurantIdentifier_RestaurantId(restaurantId);
-
-        if(existingRestaurant == null){
-            throw new NotFoundException("Restaurant with id: " + restaurantId +" not found.");
-        }
-
-        restaurant.setId(existingRestaurant.getId());
-        restaurant.setRestaurantIdentifier( existingRestaurant.getRestaurantIdentifier());
-
-        return restaurantRepository.save(restaurant);
-
-    }*/
 
     @Override
     public void deleteRestaurant(String restaurantId) {

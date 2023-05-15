@@ -20,6 +20,15 @@ public class ClientOrderController {
         this.orderService = orderService;
     }
 
+    @GetMapping(produces = "application/json")
+    ResponseEntity<OrderResponseModel[]> getAllClientOrders(@PathVariable String clientId) {
+        return ResponseEntity.ok().body(orderService.getAllOrdersAggregateByClientId(clientId));
+    }
+
+    @GetMapping(value = "/{orderId}", produces = "application/json")
+    ResponseEntity<OrderResponseModel> getOrderById(@PathVariable String clientId, @PathVariable String orderId) {
+        return ResponseEntity.ok().body(orderService.getOrderByOrderIdAndByClientId(clientId, orderId));
+    }
     @PostMapping(consumes = "application/json", produces = "application/json")
     ResponseEntity<OrderResponseModel> processClientOrders(@RequestBody OrderRequestModel orderRequestModel,
                                                            @PathVariable String clientId) {
@@ -31,6 +40,10 @@ public class ClientOrderController {
     ResponseEntity<Void> updateClientOrder(@PathVariable String clientId,@PathVariable String orderId, @RequestBody OrderRequestModel orderRequestModel) {
         orderService.updateClientOrder(clientId, orderId, orderRequestModel);
         return ResponseEntity.noContent().build();
-
+    }
+    @DeleteMapping(value = "/{orderId}", produces = "application/json")
+    ResponseEntity<Void> deleteOrderById(@PathVariable String clientId, @PathVariable String orderId) {
+        orderService.deleteOrderByIdAndClientId(clientId, orderId);
+        return ResponseEntity.noContent().build();
     }
 }
