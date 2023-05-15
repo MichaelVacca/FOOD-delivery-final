@@ -23,12 +23,14 @@ public class ClientController {
     }
 
     @GetMapping()
-    public List<ClientResponseModel> getClients(){
-        return clientService.getAllClients();
+    public ResponseEntity<List<ClientResponseModel>> getClients(){
+        return ResponseEntity.ok().body(clientService.getAllClients());
+
     }
     @GetMapping("/{clientId}")
-    public ClientResponseModel getClientByClientId(@PathVariable String clientId){
-        return clientService.getClientById(clientId);
+    public ResponseEntity<ClientResponseModel> getClientByClientId(@PathVariable String clientId){
+        return ResponseEntity.ok().body(clientService.getClientById(clientId));
+
     }
     @PostMapping()
     ResponseEntity<ClientResponseModel>  addClient(@RequestBody ClientRequestModel clientRequestModel){

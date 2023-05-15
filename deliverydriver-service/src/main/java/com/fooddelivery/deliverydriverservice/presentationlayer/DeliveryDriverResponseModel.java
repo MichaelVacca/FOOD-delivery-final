@@ -4,11 +4,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+import org.springframework.hateoas.RepresentationModel;
 
 @Value
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class DeliveryDriverResponseModel {
+public class DeliveryDriverResponseModel extends RepresentationModel<DeliveryDriverResponseModel> {
 
     private final String deliveryDriverId;
     private final String firstName;

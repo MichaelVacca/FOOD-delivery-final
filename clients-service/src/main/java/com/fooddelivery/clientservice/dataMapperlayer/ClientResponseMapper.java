@@ -2,11 +2,18 @@ package com.fooddelivery.clientservice.dataMapperlayer;
 
 
 import com.fooddelivery.clientservice.Datalayer.Client;
+import com.fooddelivery.clientservice.presentationlayer.ClientController;
 import com.fooddelivery.clientservice.presentationlayer.ClientResponseModel;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.springframework.hateoas.Link;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Mapper(componentModel = "spring")
 public interface ClientResponseMapper {
@@ -21,5 +28,19 @@ public interface ClientResponseMapper {
     ClientResponseModel entityToResponseModel(Client client);
 
     List<ClientResponseModel> entityListToResponseModelList(List<Client> clients);
+
+    @AfterMapping
+    default void addLinks(@MappingTarget ClientResponseModel clientResponseModel, Client client) {
+
+        Link selfLink = linkTo(methodOn(ClientController.class)
+                .getClientByClientId(clientResponseModel.getClientId()))
+                .withSelfRel();
+        clientResponseModel.add(selfLink);
+
+        Link clientLink = linkTo(methodOn(ClientController.class)
+                .getClients())
+                .withRel("allClients");
+        clientResponseModel.add(clientLink);
+    }
 
 }

@@ -5,7 +5,7 @@ plugins {
 	id 'io.freefair.lombok' version '6.6.1'
 	id 'jacoco'
 }
-group = 'com.cardealership.api-gateway'
+group = 'com.fooddelivery.api-gateway'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 ext {

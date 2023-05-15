@@ -21,13 +21,15 @@ public class DeliveryDriverController {
     }
 
     @GetMapping()
-    public List<DeliveryDriverResponseModel> getDeliveryDrivers(){
-        return deliveryDriverService.getAllDeliveryDrivers();
+    public ResponseEntity<List<DeliveryDriverResponseModel>> getDeliveryDrivers(){
+        return ResponseEntity.ok().body(deliveryDriverService.getAllDeliveryDrivers());
+       // return deliveryDriverService.getAllDeliveryDrivers();
     }
 
     @GetMapping("/{deliveryDriverId}")
-    public DeliveryDriverResponseModel getDeliveryDriversById(@PathVariable String deliveryDriverId){
-        return deliveryDriverService.getDeliveryDriversById(deliveryDriverId);
+    public ResponseEntity <DeliveryDriverResponseModel> getDeliveryDriversById(@PathVariable String deliveryDriverId){
+        return ResponseEntity.ok().body(deliveryDriverService.getDeliveryDriversById(deliveryDriverId));
+        //return deliveryDriverService.getDeliveryDriversById(deliveryDriverId);
     }
 
     @PostMapping()

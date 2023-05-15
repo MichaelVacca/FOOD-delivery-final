@@ -11,10 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class MenuResponseModel extends RepresentationModel<MenuResponseModel> {
-    private  String restaurantId;
-    private  String menuId;
-    private  String typeOfMenu;
-    private  List<Items> items;
+      String restaurantId;
+      String menuId;
+      String typeOfMenu;
+      List<Items> items;
 
 
 }

@@ -4,11 +4,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+import org.springframework.hateoas.RepresentationModel;
 
 @Value
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ClientResponseModel {
+public class ClientResponseModel extends RepresentationModel<ClientResponseModel> {
 
     private final String clientId;
     private final String userName;

@@ -6,17 +6,18 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
 @Value
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class MenuResponseModel {
-    private final String restaurantId;
-    private final String menuId;
-    private final String typeOfMenu;
-    private final List<Items> items;
+public class MenuResponseModel extends RepresentationModel<MenuResponseModel> {
+      String restaurantId;
+      String menuId;
+      String typeOfMenu;
+      List<Items> items;
 
 
 }

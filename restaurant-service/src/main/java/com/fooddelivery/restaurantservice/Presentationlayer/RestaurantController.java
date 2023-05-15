@@ -28,15 +28,17 @@ public class RestaurantController {
     }*/
     //TODO: RESPONSE ENTITY
     @GetMapping
-    public List<RestaurantResponseModel> getRestaurants(){
-        return restaurantService.getRestaurants();
+    public ResponseEntity<List<RestaurantResponseModel>> getRestaurants(){
+        return ResponseEntity.ok().body(restaurantService.getRestaurants());
+
     }
 
 
     //TODO: RESPONSE ENTITY
     @GetMapping("/{restaurantId}")
-    public RestaurantResponseModel getRestaurantsByRestaurantId(@PathVariable String restaurantId){
-        return restaurantService.getRestaurantsById(restaurantId);
+    public ResponseEntity<RestaurantResponseModel> getRestaurantsByRestaurantId(@PathVariable String restaurantId){
+        return ResponseEntity.ok().body(restaurantService.getRestaurantsById(restaurantId));
+
     }
     //my lab
     @PostMapping()
@@ -45,15 +47,7 @@ public class RestaurantController {
     }
 
 
-/*    @PutMapping("/{restaurantId}")
-    public Restaurant updateRestaurant(@RequestBody Restaurant restaurant, @PathVariable String restaurantId){
-        return restaurantService.updateRestaurant(restaurant, restaurantId);
-    }*/
 
-/*    @PostMapping
-    ResponseEntity<RestaurantResponseModel> addRestaurant(@RequestBody RestaurantRequestModel restaurantRequestModel){
-        return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.addRestaurant(restaurantRequestModel));
-    }*/
 
     @PutMapping("/{restaurantId}")
     ResponseEntity <RestaurantResponseModel> updateRestaurant(@RequestBody RestaurantRequestModel restaurantRequestModel, @PathVariable String restaurantId){
@@ -75,8 +69,9 @@ public class RestaurantController {
     //Menus
 
     @GetMapping("/{restaurantId}/menus/{menuId}")
-    MenuResponseModel getMenusInRestaurantById(@PathVariable String restaurantId,@PathVariable String menuId){
-        return menuService.getMenusInRestaurantsById(restaurantId, menuId);
+     public ResponseEntity <MenuResponseModel> getMenusInRestaurantById(@PathVariable String restaurantId,@PathVariable String menuId){
+        return ResponseEntity.ok().body(menuService.getMenusInRestaurantsById(restaurantId,menuId));
+
     }
 
 /*    @PostMapping("/{restaurantId}/menus")
@@ -94,21 +89,24 @@ public class RestaurantController {
     }
 
     @GetMapping("/{restaurantId}/menus")
-    List<MenuResponseModel> getMenusInRestaurants(@PathVariable String restaurantId, @RequestParam(required = false) Map<String,String> queryParams){
-        return menuService.getMenusInRestaurantsByField(restaurantId,queryParams);
+    public ResponseEntity<List<MenuResponseModel>> getMenusInRestaurants(@PathVariable String restaurantId, @RequestParam(required = false) Map<String,String> queryParams){
+        return ResponseEntity.ok().body(menuService.getMenusInRestaurantsByField(restaurantId,queryParams));
+
     }
 
     @PutMapping("/{restaurantId}/menus/{menuId}")
-    MenuResponseModel updateMenuInRestaurant(@RequestBody MenuRequestModel menuRequestModel,
+    ResponseEntity <MenuResponseModel> updateMenuInRestaurant(@RequestBody MenuRequestModel menuRequestModel,
                                              @PathVariable String restaurantId, @PathVariable String menuId){
         if(menuRequestModel.getMenuId().length() != 36){
             throw new InvalidInputException("Invalid menu id provided:" + menuRequestModel.getMenuId() + "| must be 36 characters long.");
         }
-        return menuService.updateMenuInRestaurant(menuRequestModel,restaurantId,menuId);
+        return ResponseEntity.ok().body(menuService.updateMenuInRestaurant(menuRequestModel,restaurantId,menuId));
+
     }
 
     @DeleteMapping("/{restaurantId}/menus/{menuId}")
-    void deleteMenuFromRestaurantById(@PathVariable String restaurantId, @PathVariable String menuId){
+    ResponseEntity <Void> deleteMenuFromRestaurantById(@PathVariable String restaurantId, @PathVariable String menuId){
         menuService.deleteMenuInRestaurant(restaurantId,menuId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

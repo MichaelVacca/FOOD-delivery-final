@@ -1,22 +1,23 @@
 package com.fooddelivery.apigateway.presentationLayer;
 
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ClientResponseModel {
+public class ClientResponseModel extends RepresentationModel<ClientResponseModel> {
 
-    private  String clientId;
-    private  String userName;
-    private  String password;
-    private  String age;
-    private  String emailAddress;
-    private  String phoneNumber;
-    private  String countryName;
-    private  String streetName;
-    private  String cityName;
-    private  String provinceName;
-    private  String postalCode;
+      String clientId;
+      String userName;
+      String password;
+      String age;
+      String emailAddress;
+      String phoneNumber;
+      String countryName;
+      String streetName;
+      String cityName;
+      String provinceName;
+      String postalCode;
 }
