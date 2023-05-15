@@ -1,13 +1,11 @@
 package com.fooddelivery.restaurantservice.Presentationlayer;
 
 import com.fooddelivery.restaurantservice.Datalayer.Items;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import java.util.List;
 
+@Data
 @Value
 @Builder
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
@@ -17,5 +15,7 @@ public class MenuRequestModel {
     private String restaurantId;
     private String typeOfMenu;
     private List<Items> items;
+
+
 
 }

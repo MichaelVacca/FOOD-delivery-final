@@ -93,6 +93,22 @@ class DeliveryDriverServiceClientTest {
 
         verify(restTemplate, times(1)).getForObject(baseUrl + "/" + deliveryDriverId, DeliveryDriverResponseModel.class);
     }
+    @Test
+    public void getAllDeliveryDriversThrowsHttpClientErrorExceptionTest() {
+        // Given
+        String url = baseUrl;
+        HttpClientErrorException mockException = mock(HttpClientErrorException.class);
+        when(restTemplate.getForObject(url, DeliveryDriverResponseModel[].class)).thenThrow(mockException);
+
+        // Then
+        assertThrows(RuntimeException.class, () -> {
+            // When
+            deliveryDriverServiceClient.getAllDeliveryDriversAggregate();
+        });
+
+        verify(restTemplate, times(1)).getForObject(url, DeliveryDriverResponseModel[].class);
+    }
+
 
     @Test
     public void addDeliveryDriverTest() {
@@ -236,11 +252,10 @@ class DeliveryDriverServiceClientTest {
 
     @Test
     public void testUpdateDeliveryDriver() {
-        // Arrange
         String driverId = "1";
         String url = baseUrl + "/" + driverId;
         DeliveryDriverRequestModel deliveryDriverRequestModel = new DeliveryDriverRequestModel();
-        // populate deliveryDriverRequestModel fields here...
+
 
         when(restTemplate.execute(eq(url), eq(HttpMethod.PUT), any(), any())).thenReturn(null);
 

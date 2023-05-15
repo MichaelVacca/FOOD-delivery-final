@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
-    private OrderServiceClient orderServiceClient;
+    private final OrderServiceClient orderServiceClient;
 
     public OrderServiceImpl(OrderServiceClient orderServiceClient) {
         this.orderServiceClient = orderServiceClient;

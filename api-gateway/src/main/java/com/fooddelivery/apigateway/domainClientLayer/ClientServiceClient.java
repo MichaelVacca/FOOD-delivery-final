@@ -76,17 +76,7 @@ public class ClientServiceClient {
         }
         return clientResponseModel;
     }
-/*    public void updateClient(String clientId, ClientRequestModel clientRequestModel) {
-        try{
-            String url = CLIENT_SERVICE_BASE_URL + "/" + clientId;
-                    restTemplate.put(url, clientRequestModel, ClientResponseModel.class);
-            log.debug("5. Received in API-Gateway Client Service Client updateClient");
-        }
-        catch (HttpClientErrorException ex) {
-            log.debug("5.");
-            throw handleHttpClientException(ex);
-        }
-    }*/
+
 
     public void updateClient(String clientId, ClientRequestModel clientRequestModel) {
         try{
@@ -112,17 +102,6 @@ public class ClientServiceClient {
     }
 
 
-/*    public void deleteClient(String clientId) {
-        try{
-            String url = CLIENT_SERVICE_BASE_URL + "/" + clientId;
-            restTemplate.delete(url);
-            log.debug("5. Received in API-Gateway Client Service Client deleteClient");
-        }
-        catch (HttpClientErrorException ex) {
-            log.debug("5.");
-            throw handleHttpClientException(ex);
-        }
-    }*/
 public void deleteClient(String clientId) {
     try{
         String url = CLIENT_SERVICE_BASE_URL + "/" + clientId;

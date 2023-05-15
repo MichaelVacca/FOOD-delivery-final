@@ -54,6 +54,7 @@ public class RestaurantServiceClient {
         return restaurantResponseModels;
     }
 
+
     public RestaurantMenuResponseModel getRestaurantAggregate(String restaurantId){
         RestaurantMenuResponseModel restaurantMenuResponseModel;
         try{
@@ -101,7 +102,7 @@ public class RestaurantServiceClient {
 /*            restTemplate.put(url, restaurantRequestModel);*/
             restTemplate.execute(url, HttpMethod.PUT,requestCallback(restaurantRequestModel), clientHttpResponse -> null);
 
-            log.debug("5. Received in API-Gateway Restaurant Service Client updateRestaurantAggregate with name: " + restaurantRequestModel.getRestaurantName());
+            //log.debug("5. Received in API-Gateway Restaurant Service Client updateRestaurantAggregate with name: " + restaurantRequestModel.getRestaurantName());
         }
 
         catch(HttpClientErrorException ex){
@@ -149,7 +150,7 @@ public class RestaurantServiceClient {
             String url = RESTAURANT_SERVICE_BASE_URL + "/" + restaurantId;
             restTemplate.delete(url);
             restTemplate.execute(url, HttpMethod.DELETE,null,   null);
-            log.debug("Received in API-Gateway Restaurant Service Client delete Restaurant with restaurant id: " + restaurantId);
+            //log.debug("Received in API-Gateway Restaurant Service Client delete Restaurant with restaurant id: " + restaurantId);
         }
         catch(HttpClientErrorException ex){
             log.debug("5. failed in delete restaurant");

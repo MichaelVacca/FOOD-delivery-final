@@ -79,7 +79,7 @@ public class OrderServiceClient {
         try{
             String url = ORDER_CLIENT_BASE_URL + "/" + clientId + "/orders/" + orderId;
             restTemplate.execute(url, HttpMethod.PUT, requestCallback(orderRequestModel), clientHttpResponse -> null);
-            log.debug("7. Received in API-Gateway Order Service Client updateClientOrder");
+            //log.debug("7. Received in API-Gateway Order Service Client updateClientOrder");
         }
         catch(HttpClientErrorException ex){
             log.debug("7.");

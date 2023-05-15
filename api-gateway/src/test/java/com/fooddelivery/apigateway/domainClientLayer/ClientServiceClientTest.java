@@ -10,13 +10,10 @@ import com.fooddelivery.apigateway.utils.exceptions.InvalidInputException;
 import com.fooddelivery.apigateway.utils.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
@@ -38,7 +35,12 @@ class ClientServiceClientTest {
     private ClientServiceClient clientServiceClient;
 
     private String clientId = "c3540a89-cb47-4c96-888e-ff96708db4d8";
-    private String baseUrl = "http://localhost:8080/api/v1/clients";
+    private String baseUrl1 = "http://localhost:8080/api/v1/clients";
+
+    private String clientServiceHost = "localhost";
+    private String clientServicePort = "8080";
+    private String baseClientUrl = "http://" + clientServiceHost + ":" + clientServicePort + "/api/v1/clients";
+
 
 
     @Autowired
@@ -52,7 +54,7 @@ class ClientServiceClientTest {
     @Test
     public void getAllClientsAggregateTest() {
         // Arrange
-        String url = baseUrl;
+        String url = baseUrl1;
 
         ClientResponseModel client1 = new ClientResponseModel("1", "user1", "pass1", "21", "email1@test.com", "phone1", "country1", "street1", "city1", "province1", "postal1");
         ClientResponseModel client2 = new ClientResponseModel("2", "user2", "pass2", "22", "email2@test.com", "phone2", "country2", "street2", "city2", "province2", "postal2");
@@ -75,7 +77,7 @@ class ClientServiceClientTest {
     @Test
     public void getClientTest() {
         ClientResponseModel clientResponseModel = new ClientResponseModel(clientId, "1", "1", "1", "1", "1", "1", "1", "1", "1", "1");
-        when(restTemplate.getForObject(baseUrl + "/" + clientId, ClientResponseModel.class)).thenReturn(clientResponseModel);
+        when(restTemplate.getForObject(baseUrl1 + "/" + clientId, ClientResponseModel.class)).thenReturn(clientResponseModel);
 
         ClientResponseModel result = clientServiceClient.getClient(clientId);
         assertEquals(result.getClientId(), clientId);
@@ -90,7 +92,7 @@ class ClientServiceClientTest {
         assertEquals(result.getProvinceName(), "1");
         assertEquals(result.getPostalCode(), "1");
 
-        verify(restTemplate, times(1)).getForObject(baseUrl + "/" + clientId, ClientResponseModel.class);
+        verify(restTemplate, times(1)).getForObject(baseUrl1 + "/" + clientId, ClientResponseModel.class);
 
     }
     @Test
@@ -110,13 +112,13 @@ class ClientServiceClientTest {
 
         ClientResponseModel clientResponseModel = new ClientResponseModel(clientId, "1", "1", "1", "1", "1", "1", "1", "1", "1", "1");
 
-        when(restTemplate.postForObject(baseUrl, clientRequestModel, ClientResponseModel.class)).thenReturn(clientResponseModel);
+        when(restTemplate.postForObject(baseUrl1, clientRequestModel, ClientResponseModel.class)).thenReturn(clientResponseModel);
 
         ClientResponseModel result = clientServiceClient.addClient(clientRequestModel);
         assertEquals(result.getClientId(), clientId);
 
         // Verify that postForObject method was called
-        verify(restTemplate, times(1)).postForObject(baseUrl, clientRequestModel, ClientResponseModel.class);
+        verify(restTemplate, times(1)).postForObject(baseUrl1, clientRequestModel, ClientResponseModel.class);
     }
     @Test
     public void testGetClient_NotFoundException() throws JsonProcessingException {
@@ -136,7 +138,7 @@ class ClientServiceClientTest {
         HttpClientErrorException ex = HttpClientErrorException.create(HttpStatus.NOT_FOUND, "Not Found",
                 HttpHeaders.EMPTY, errorInfoJson.getBytes(), null);
 
-        when(restTemplate.getForObject(baseUrl + "/" + clientId, ClientResponseModel.class)).thenThrow(ex);
+        when(restTemplate.getForObject(baseUrl1 + "/" + clientId, ClientResponseModel.class)).thenThrow(ex);
 
         Exception exception = assertThrows(NotFoundException.class, () ->
                 clientServiceClient.getClient(clientId));
@@ -173,7 +175,7 @@ class ClientServiceClientTest {
         HttpClientErrorException ex = HttpClientErrorException.create(HttpStatus.NOT_FOUND, "Not Found",
                 HttpHeaders.EMPTY, errorInfoJson.getBytes(), null);
 
-        when(restTemplate.postForObject(baseUrl, clientRequestModel, ClientResponseModel.class)).thenThrow(ex);
+        when(restTemplate.postForObject(baseUrl1, clientRequestModel, ClientResponseModel.class)).thenThrow(ex);
 
         Exception exception = assertThrows(NotFoundException.class, () ->
                 clientServiceClient.addClient(clientRequestModel));
@@ -212,13 +214,31 @@ class ClientServiceClientTest {
         HttpClientErrorException ex = HttpClientErrorException.create(HttpStatus.UNPROCESSABLE_ENTITY, "Unprocessable Entity",
                 HttpHeaders.EMPTY, errorInfoJson.getBytes(), null);
 
-        when(restTemplate.postForObject(baseUrl, clientRequestModel, ClientResponseModel.class)).thenThrow(ex);
+        when(restTemplate.postForObject(baseUrl1, clientRequestModel, ClientResponseModel.class)).thenThrow(ex);
 
         Exception exception = assertThrows(InvalidInputException.class, () ->
                 clientServiceClient.addClient(clientRequestModel));
 
         assertTrue(exception.getMessage().contains("Unprocessable Entity"));
     }
+
+    @Test
+    public void testUpdateClient() {
+        // Given
+        String clientId = "clientId1";
+        String url = baseClientUrl + "/" + clientId;
+
+        ClientRequestModel clientRequestModel = new ClientRequestModel("1", "1", "1", "1", "1", "1", "1", "1", "1", "1");
+
+        when(restTemplate.execute(eq(url), eq(HttpMethod.PUT), any(RequestCallback.class), any())).thenReturn(null);
+
+        // When
+        clientServiceClient.updateClient(clientId, clientRequestModel);
+
+        // Then
+        verify(restTemplate, times(1)).execute(eq(url), eq(HttpMethod.PUT), any(RequestCallback.class), any());
+    }
+
 
     @Test
     public void testUpdateClient_NotFoundException() throws JsonProcessingException {
@@ -287,6 +307,22 @@ class ClientServiceClientTest {
 
         assertTrue(exception.getMessage().contains("Unprocessable Entity"));
     }
+
+    @Test
+    public void testDeleteClient() {
+        // Given
+        String clientId = "clientId1";
+        String url = baseClientUrl + "/" + clientId;
+
+        when(restTemplate.execute(eq(url), eq(HttpMethod.DELETE), any(),  any())).thenReturn(null);
+
+        // When
+        clientServiceClient.deleteClient(clientId);
+
+        // Then
+        verify(restTemplate, times(1)).execute(eq(url), eq(HttpMethod.DELETE), any(),  any());
+    }
+
 
     @Test
     public void testDeleteClient_NotFoundException() throws JsonProcessingException {

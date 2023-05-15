@@ -28,9 +28,6 @@ class DeliveryDriverControllerTest {
 
     @LocalServerPort
     private int port;
-    @MockBean
-    private ClientsService clientsService;
-
     @Autowired
     RestTemplate restTemplate;
 

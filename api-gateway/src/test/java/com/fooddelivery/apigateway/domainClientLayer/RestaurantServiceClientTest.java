@@ -13,18 +13,10 @@ import org.springframework.web.client.RestTemplate;
 import com.fooddelivery.apigateway.utils.HttpErrorInfo;
 import com.fooddelivery.apigateway.utils.exceptions.InvalidInputException;
 import com.fooddelivery.apigateway.utils.exceptions.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.RestTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -46,7 +38,12 @@ class RestaurantServiceClientTest {
     private RestaurantServiceClient restaurantServiceClient;
 
     private String restaurantId = "f1740a89-cb47-4c96-888e-ff96708db4d8";
-    private String baseUrl = "http://localhost:8080/api/v1/restaurants";
+    private String baseUrl1 = "http://localhost:8080/api/v1/restaurants";
+
+    private String restaurantServiceHost = "localhost";  // or whatever host your tests should use
+    private String restaurantServicePort = "8080";  // or whatever port your tests should use
+    private String baseRestaurantUrl = "http://" + restaurantServiceHost + ":" + restaurantServicePort + "/api/v1/restaurants";
+
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -60,7 +57,7 @@ class RestaurantServiceClientTest {
     public void getAllRestaurants()  {
 
 
-        String url = baseUrl;
+        String url = baseUrl1;
 
         RestaurantResponseModel restaurantResponseModel1 = new RestaurantResponseModel("1", "testRestaurant1", "country1", "21St", "quebec", "montreal", "A2C 4O9");
         RestaurantResponseModel restaurantResponseModel2 = new RestaurantResponseModel("2", "testRestaurant2", "country2", "22St", "quebec", "montreal", "A2C 4O9");
@@ -78,15 +75,27 @@ class RestaurantServiceClientTest {
     }
 
     @Test
+    public void getAllRestaurants_ThrowsHttpClientErrorExceptionTest() {
+        String url = baseUrl1;
+        HttpClientErrorException exception = mock(HttpClientErrorException.class);
+        when(restTemplate.getForObject(url, RestaurantResponseModel[].class)).thenThrow(exception);
+
+        assertThrows(RuntimeException.class, () -> restaurantServiceClient.getAllRestaurantsAggregate());
+
+        verify(restTemplate, times(1)).getForObject(url, RestaurantResponseModel[].class);
+
+    }
+
+    @Test
     public void getRestaurantById() {
         RestaurantMenuResponseModel restaurantMenuResponseModel = new RestaurantMenuResponseModel(restaurantId, "testRestaurant1", "menuId", "testMenu" );
-    when(restTemplate.getForObject(baseUrl + "/" + restaurantId, RestaurantMenuResponseModel.class)).thenReturn(restaurantMenuResponseModel);
+    when(restTemplate.getForObject(baseUrl1 + "/" + restaurantId, RestaurantMenuResponseModel.class)).thenReturn(restaurantMenuResponseModel);
     RestaurantMenuResponseModel restaurant = restaurantServiceClient.getRestaurantAggregate(restaurantId);
     assertEquals(restaurant.getRestaurantId(),restaurantId);
     assertEquals(restaurant.getRestaurantName(), "testRestaurant1");
     assertEquals(restaurant.getMenuId(), "menuId");
     assertEquals(restaurant.getTypeOfMenu(), "testMenu");
-    verify(restTemplate, times(1)).getForObject(baseUrl + "/" + restaurantId, RestaurantMenuResponseModel.class);
+    verify(restTemplate, times(1)).getForObject(baseUrl1 + "/" + restaurantId, RestaurantMenuResponseModel.class);
     }
 
     @Test
@@ -100,7 +109,7 @@ class RestaurantServiceClientTest {
                 .postalCode("A2C 4O9")
                 .build();
         RestaurantResponseModel restaurantResponseModel = new RestaurantResponseModel("1", "testRestaurant1", "country1", "21St", "quebec", "montreal", "A2C 4O9");
-        when(restTemplate.postForObject(baseUrl, restaurantRequestModel, RestaurantResponseModel.class)).thenReturn(restaurantResponseModel);
+        when(restTemplate.postForObject(baseUrl1, restaurantRequestModel, RestaurantResponseModel.class)).thenReturn(restaurantResponseModel);
         RestaurantResponseModel restaurant = restaurantServiceClient.addRestaurantAggregate(restaurantRequestModel);
         assertEquals(restaurant.getRestaurantId(), "1");
         assertEquals(restaurant.getRestaurantName(), "testRestaurant1");
@@ -109,7 +118,7 @@ class RestaurantServiceClientTest {
         assertEquals(restaurant.getProvinceName(), "quebec");
         assertEquals(restaurant.getCityName(), "montreal");
         assertEquals(restaurant.getPostalCode(), "A2C 4O9");
-        verify(restTemplate, times(1)).postForObject(baseUrl, restaurantRequestModel, RestaurantResponseModel.class);
+        verify(restTemplate, times(1)).postForObject(baseUrl1, restaurantRequestModel, RestaurantResponseModel.class);
 
     }
     @Test
@@ -129,14 +138,33 @@ class RestaurantServiceClientTest {
 
         HttpClientErrorException ex = HttpClientErrorException.create(HttpStatus.NOT_FOUND, "Not Found",
                 HttpHeaders.EMPTY, errorInfoJson.getBytes(), null);
-        when(restTemplate.getForObject(baseUrl + "/" + restaurantId, RestaurantMenuResponseModel.class)).thenThrow(ex);
+        when(restTemplate.getForObject(baseUrl1 + "/" + restaurantId, RestaurantMenuResponseModel.class)).thenThrow(ex);
         Exception exception = assertThrows(NotFoundException.class, () ->
                 restaurantServiceClient.getRestaurantAggregate(restaurantId));
         assertTrue(exception.getMessage().contains("Not Found"));
 
         }
 
-        @Test
+    @Test
+    public void testUpdateRestaurantAggregate() {
+        // Given
+        String restaurantId = "restaurantId1";
+        String url = baseRestaurantUrl + "/" + restaurantId;
+
+        RestaurantRequestModel restaurantRequestModel = new RestaurantRequestModel();
+        // populate restaurantRequestModel with test data
+
+        when(restTemplate.execute(eq(url), eq(HttpMethod.PUT), any(RequestCallback.class), any())).thenReturn(null);
+
+        // When
+        restaurantServiceClient.updateRestaurantAggregate(restaurantId, restaurantRequestModel);
+
+        // Then
+        verify(restTemplate, times(1)).execute(eq(url), eq(HttpMethod.PUT), any(RequestCallback.class), any());
+    }
+
+
+    @Test
     public void testUpdateRestaurant_NotFound()throws JsonProcessingException {
         String restaurantId = "not-foundId";
         RestaurantRequestModel restaurantRequestModel =  RestaurantRequestModel.builder()
@@ -193,6 +221,22 @@ class RestaurantServiceClientTest {
     }
 
     @Test
+    public void testDeleteRestaurant() {
+        // Given
+        String restaurantId = "restaurantId1";
+        String url = baseRestaurantUrl + "/" + restaurantId;
+
+        when(restTemplate.execute(eq(url), eq(HttpMethod.DELETE), any(RequestCallback.class), any())).thenReturn(null);
+
+        // When
+        restaurantServiceClient.deleteRestaurant(restaurantId);
+
+        // Then
+        verify(restTemplate, times(1)).execute(eq(url), eq(HttpMethod.DELETE), any(),  any());
+    }
+
+
+    @Test
     public void testDeleteRestaurant_NotFoundException()throws JsonProcessingException {
         String restaurantId = "not-foundId";
         HttpErrorInfo errorInfo = new HttpErrorInfo(HttpStatus.NOT_FOUND,"/api/v1/restaurants/" + restaurantId, "Not Found");
@@ -230,7 +274,7 @@ class RestaurantServiceClientTest {
     public void testGetMenuByMenuId_ValidId() throws JsonProcessingException {
         String restaurantId = "validRestaurantId";
         String menuId = "validMenuId";
-        String url = baseUrl + "/" + restaurantId + "/menus/" + menuId;
+        String url = baseUrl1 + "/" + restaurantId + "/menus/" + menuId;
 
         List<Items> items = new ArrayList<>();
         items.add(new Items("item1", "desc1", 10.0));
@@ -255,7 +299,7 @@ class RestaurantServiceClientTest {
         // Given
         String restaurantId = "not-foundId";
         String menuId = "not-foundId";
-        String url = baseUrl + "/" + restaurantId + "/menus/" + menuId;
+        String url = baseUrl1 + "/" + restaurantId + "/menus/" + menuId;
 
         HttpErrorInfo errorInfo = new HttpErrorInfo(HttpStatus.NOT_FOUND, url, "Not Found");
 
@@ -279,7 +323,7 @@ class RestaurantServiceClientTest {
     public void testAddMenuToRestaurant_ValidRequest() {
         // Given
         String restaurantId = "validRestaurantId";
-        String url = baseUrl + "/" + restaurantId + "/menus";
+        String url = baseUrl1 + "/" + restaurantId + "/menus";
 
         MenuRequestModel newMenu = new MenuRequestModel();
 
@@ -300,7 +344,7 @@ class RestaurantServiceClientTest {
     public void testAddMenuToRestaurant_ThrowsException() {
         // Given
         String restaurantId = "validRestaurantId";
-        String url = baseUrl + "/" + restaurantId + "/menus";
+        String url = baseUrl1 + "/" + restaurantId + "/menus";
 
         MenuRequestModel newMenu = new MenuRequestModel();
         // set the fields of newMenu
@@ -321,7 +365,7 @@ class RestaurantServiceClientTest {
         // Given
         String restaurantId = "validRestaurantId";
         String menuId = "validMenuId";
-        String url = baseUrl + "/" + restaurantId + "/menus/" + menuId;
+        String url = baseUrl1 + "/" + restaurantId + "/menus/" + menuId;
 
         MenuRequestModel menuRequestModel = new MenuRequestModel();
         // set the fields of menuRequestModel
@@ -341,7 +385,7 @@ class RestaurantServiceClientTest {
         // Given
         String restaurantId = "validRestaurantId";
         String menuId = "validMenuId";
-        String url = baseUrl + "/" + restaurantId + "/menus/" + menuId;
+        String url = baseUrl1 + "/" + restaurantId + "/menus/" + menuId;
 
         MenuRequestModel menuRequestModel = new MenuRequestModel();
         // set the fields of menuRequestModel
@@ -361,7 +405,7 @@ class RestaurantServiceClientTest {
         // Given
         String restaurantId = "validRestaurantId";
         String menuId = "validMenuId";
-        String url = baseUrl + "/" + restaurantId + "/menus/" + menuId;
+        String url = baseUrl1 + "/" + restaurantId + "/menus/" + menuId;
 
         when(restTemplate.execute(eq(url), eq(HttpMethod.DELETE), any(), any())).thenReturn(null);
 
@@ -377,7 +421,7 @@ class RestaurantServiceClientTest {
         // Given
         String restaurantId = "validRestaurantId";
         String menuId = "validMenuId";
-        String url = baseUrl + "/" + restaurantId + "/menus/" + menuId;
+        String url = baseUrl1 + "/" + restaurantId + "/menus/" + menuId;
 
         HttpClientErrorException ex = HttpClientErrorException.create(HttpStatus.BAD_REQUEST, "Bad Request",
                 HttpHeaders.EMPTY, null, null);

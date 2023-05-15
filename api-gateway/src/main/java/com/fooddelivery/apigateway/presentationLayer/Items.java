@@ -2,11 +2,13 @@ package com.fooddelivery.apigateway.presentationLayer;
 
 
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Generated;
 
 import java.util.Objects;
 
 @Generated
+@EqualsAndHashCode
 public class Items {
 private String itemName;
 private String itemDesc;

@@ -30,8 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RestaurantControllerTest {
     @LocalServerPort
     private int port;
-    @MockBean
-    private RestaurantService restaurantService;
+/*    @MockBean
+    private RestaurantService restaurantService;*/
 
     @Autowired
     RestTemplate restTemplate;
@@ -62,13 +62,13 @@ class RestaurantControllerTest {
         RestaurantResponseModel restaurantResponseModel1 = new RestaurantResponseModel("2", "restaurant2", "country2", "street2", "province2", "city2", "postalCode2");
         RestaurantResponseModel[] restaurantResponseModels = new RestaurantResponseModel[]{restaurantResponseModel, restaurantResponseModel1};
 
-        when(restaurantService.getAllRestaurantsAggregate()).thenReturn(restaurantResponseModels);
+        when(restaurantServiceClient.getAllRestaurantsAggregate()).thenReturn(restaurantResponseModels);
 
         mockMvc.perform(get("/api/v1/restaurants")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(restaurantService, times(1)).getAllRestaurantsAggregate();
+        verify(restaurantServiceClient, times(1)).getAllRestaurantsAggregate();
 
     }
 
@@ -76,11 +76,11 @@ class RestaurantControllerTest {
     public void getRestaurantById() throws Exception{
         String restaurantId = "1";
         RestaurantMenuResponseModel restaurantMenuResponseModel = new RestaurantMenuResponseModel("1", "menu1", "typeOfMenu1", "items1");
-        when(restaurantService.getRestaurantAggregate(restaurantId)).thenReturn(restaurantMenuResponseModel);
+        when(restaurantServiceClient.getRestaurantAggregate(restaurantId)).thenReturn(restaurantMenuResponseModel);
         mockMvc.perform(get("/api/v1/restaurants/"+restaurantId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        verify(restaurantService, times(1)).getRestaurantAggregate(restaurantId);
+        verify(restaurantServiceClient, times(1)).getRestaurantAggregate(restaurantId);
     }
 
     @Test
@@ -96,7 +96,7 @@ class RestaurantControllerTest {
                 .build();
 
         RestaurantResponseModel restaurantResponseModel = new RestaurantResponseModel("1", "restaurant1", "country1", "street1", "province1", "city1", "postalCode1");
-        when(restaurantService.addRestaurant(restaurantRequestModel)).thenReturn(restaurantResponseModel);
+        when(restaurantServiceClient.addRestaurantAggregate(restaurantRequestModel)).thenReturn(restaurantResponseModel);
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/restaurants")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(restaurantRequestModel)))
@@ -123,23 +123,23 @@ class RestaurantControllerTest {
                 .cityName("city1")
                 .postalCode("postalCode1")
                 .build();
-        doNothing().when(restaurantService).updateRestaurantAggregate(restaurantId, restaurantRequestModel);
+        doNothing().when(restaurantServiceClient).updateRestaurantAggregate(restaurantId, restaurantRequestModel);
         mockMvc.perform(put("/api/v1/restaurants/"+restaurantId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(restaurantRequestModel)))
                 .andExpect(status().isNoContent());
 
-        verify(restaurantService, times(1)).updateRestaurantAggregate(restaurantId, restaurantRequestModel);
+        verify(restaurantServiceClient, times(1)).updateRestaurantAggregate(restaurantId, restaurantRequestModel);
     }
 
     @Test
     public void deleteRestaurant() throws Exception{
         String restaurantId = "1";
-        doNothing().when(restaurantService).deleteRestaurantAggregate(restaurantId);
+        doNothing().when(restaurantServiceClient).deleteRestaurant(restaurantId);
         mockMvc.perform(delete("/api/v1/restaurants/"+restaurantId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
-        verify(restaurantService, times(1)).deleteRestaurantAggregate(restaurantId);
+        verify(restaurantServiceClient, times(1)).deleteRestaurant(restaurantId);
     }
 
     @Test
@@ -147,11 +147,11 @@ class RestaurantControllerTest {
         String restaurantId = "1";
         String menuId = "1";
         MenuResponseModel menuResponseModel = new MenuResponseModel();
-        when(restaurantService.getMenuByMenuId(restaurantId, menuId)).thenReturn(menuResponseModel);
+        when(restaurantServiceClient.getMenuByMenuId(restaurantId, menuId)).thenReturn(menuResponseModel);
         mockMvc.perform(get("/api/v1/restaurants/"+restaurantId+"/menus/"+menuId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        verify(restaurantService, times(1)).getMenuByMenuId(restaurantId, menuId);
+        verify(restaurantServiceClient, times(1)).getMenuByMenuId(restaurantId, menuId);
     }
 
     @Test
@@ -165,7 +165,7 @@ class RestaurantControllerTest {
         MenuRequestModel menuRequestModel = new MenuRequestModel("1", "menu1", "typeOfMenu1");
         MenuResponseModel menuResponseModel = new MenuResponseModel();
         //when(restaurantService.addMenuToRestaurant(restaurantId, menuRequestModel)).thenReturn(menuResponseModel);
-        when(restaurantService.addMenuToRestaurant(eq(restaurantId), any(MenuRequestModel.class))).thenReturn(menuResponseModel);
+        when(restaurantServiceClient.addMenuToRestaurant(eq(restaurantId), any(MenuRequestModel.class))).thenReturn(menuResponseModel);
 
 
 
@@ -191,12 +191,12 @@ class RestaurantControllerTest {
         List<Items> items = new ArrayList<>(Arrays.asList(one,two));
 
         MenuRequestModel menuRequestModel = new MenuRequestModel("1", "menu1", "typeOfMenu1");
-        doNothing().when(restaurantService).updateMenuInRestaurantByMenuId(any(MenuRequestModel.class), eq(restaurantId), eq(menuId));
+        doNothing().when(restaurantServiceClient).modifyMenuInRestaurant(eq(restaurantId), eq(menuId),any(MenuRequestModel.class));
         mockMvc.perform(put("/api/v1/restaurants/"+restaurantId+"/menus/"+menuId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(menuRequestModel)))
                 .andExpect(status().isNoContent());
-        verify(restaurantService, times(1)).updateMenuInRestaurantByMenuId(any(MenuRequestModel.class), eq(restaurantId), eq(menuId));
+        verify(restaurantServiceClient, times(1)).modifyMenuInRestaurant( eq(restaurantId), eq(menuId),any(MenuRequestModel.class));
     }
 
 
@@ -204,11 +204,11 @@ class RestaurantControllerTest {
     public void deleteMenuFromRestaurant() throws Exception {
         String restaurantId = "1";
         String menuId = "1";
-        doNothing().when(restaurantService).deleteMenuFromRestaurant(restaurantId, menuId);
+        doNothing().when(restaurantServiceClient).deleteMenuInRestaurant(restaurantId, menuId);
         mockMvc.perform(delete("/api/v1/restaurants/"+restaurantId+"/menus/"+menuId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
-        verify(restaurantService, times(1)).deleteMenuFromRestaurant(restaurantId, menuId);
+        verify(restaurantServiceClient, times(1)).deleteMenuInRestaurant(restaurantId, menuId);
     }
 
 
