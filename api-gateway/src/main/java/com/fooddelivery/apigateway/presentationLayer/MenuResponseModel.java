@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+//@EqualsAndHashCode(callSuper = false)
 public class MenuResponseModel extends RepresentationModel<MenuResponseModel> {
       String restaurantId;
       String menuId;

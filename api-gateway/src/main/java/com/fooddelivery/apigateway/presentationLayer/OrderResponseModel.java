@@ -12,24 +12,24 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+//@EqualsAndHashCode(callSuper = false)
 public class OrderResponseModel extends RepresentationModel<OrderResponseModel> {
-    private String orderId;
-    private String clientId;
-    private String restaurantId;
-    private String menuId;
-    private String deliveryDriverId;
-    private String driverFirstName;
-    private String driverLastName;
-    private String clientUsername;
-    private String clientEmail;
-    private List<Items> items;
-    private String restaurantName;
-    private String typeOfMenu;
-    private OrderStatus orderStatus;
-    private Double finalPrice;
-    private String estimatedDeliveryTime;
-    private String orderDate;
+     String orderId;
+     String clientId;
+     String restaurantId;
+     String menuId;
+     String deliveryDriverId;
+     String driverFirstName;
+     String driverLastName;
+     String clientUsername;
+     String clientEmail;
+     List<Items> items;
+     String restaurantName;
+     String typeOfMenu;
+     OrderStatus orderStatus;
+     Double finalPrice;
+     String estimatedDeliveryTime;
+     String orderDate;
 }
 /*    Order order = Order.builder()
             .orderIdentifier(new OrderIdentifier())

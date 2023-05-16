@@ -11,7 +11,6 @@ import org.springframework.hateoas.RepresentationModel;
 import java.util.List;
 
 @Value
-@Builder
 @AllArgsConstructor
 public class MenuResponseModel extends RepresentationModel<MenuResponseModel> {
       String restaurantId;

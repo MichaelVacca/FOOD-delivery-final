@@ -9,7 +9,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.hateoas.Link;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -29,7 +31,7 @@ public interface ClientResponseMapper {
 
     List<ClientResponseModel> entityListToResponseModelList(List<Client> clients);
 
-    @AfterMapping
+/*    @AfterMapping
     default void addLinks(@MappingTarget ClientResponseModel clientResponseModel, Client client) {
 
         Link selfLink = linkTo(methodOn(ClientController.class)
@@ -41,6 +43,30 @@ public interface ClientResponseMapper {
                 .getClients())
                 .withRel("allClients");
         clientResponseModel.add(clientLink);
+    }*/
+
+    @AfterMapping
+    default void addLinks(@MappingTarget ClientResponseModel clientResponseModel, Client client) {
+
+        URI baseUri = URI.create("http://localhost:8080");
+
+        Link selfLink = Link.of(
+                ServletUriComponentsBuilder
+                        .fromUri(baseUri)
+                        .pathSegment("api", "v1", "clients", clientResponseModel.getClientId())
+                        .toUriString(),
+                        "self");
+
+        Link clientLink = Link.of(
+                ServletUriComponentsBuilder
+                        .fromUri(baseUri)
+                        .pathSegment("api", "v1", "clients")
+                        .toUriString(),
+                "allClients");
+
+        clientResponseModel.add(selfLink);
+        clientResponseModel.add(clientLink);
     }
+
 
 }

@@ -9,7 +9,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.hateoas.Link;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -28,7 +30,7 @@ public interface DeliveryDriverResponseMapper {
 
     List<DeliveryDriverResponseModel> entityListToResponseModelList(List<DeliveryDriver> deliveryDrivers);
 
-    @AfterMapping
+/*    @AfterMapping
     default void addLinks(@MappingTarget DeliveryDriverResponseModel model, DeliveryDriver deliveryDriver) {
 
         Link selfLink = linkTo(methodOn(DeliveryDriverController.class)
@@ -40,5 +42,28 @@ public interface DeliveryDriverResponseMapper {
                 .getDeliveryDrivers())
                 .withRel("allDeliveryDrivers");
         model.add(deliveryDriverLink);
+    }*/
+
+    @AfterMapping
+    default void addLinks(@MappingTarget DeliveryDriverResponseModel deliveryDriverResponseModel, DeliveryDriver deliveryDriver) {
+
+        URI baseUri = URI.create("http://localhost:8080");
+
+        Link selfLink = Link.of(
+                ServletUriComponentsBuilder
+                        .fromUri(baseUri)
+                        .pathSegment("api", "v1", "deliveryDrivers", deliveryDriverResponseModel.getDeliveryDriverId())
+                        .toUriString(),
+                "self");
+
+        Link clientLink = Link.of(
+                ServletUriComponentsBuilder
+                        .fromUri(baseUri)
+                        .pathSegment("api", "v1", "deliveryDrivers")
+                        .toUriString(),
+                "allClients");
+
+        deliveryDriverResponseModel.add(selfLink);
+        deliveryDriverResponseModel.add(clientLink);
     }
 }

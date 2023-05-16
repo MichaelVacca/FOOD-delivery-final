@@ -6,7 +6,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+//@EqualsAndHashCode(callSuper = false)
 public class DeliveryDriverResponseModel extends RepresentationModel<DeliveryDriverResponseModel> {
 
       String deliveryDriverId;

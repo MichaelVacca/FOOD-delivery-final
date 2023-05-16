@@ -10,7 +10,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.hateoas.Link;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -25,22 +27,27 @@ public interface MenuResponseMapper {
     MenuResponseModel entityToResponseModel(Menu menu);
     List<MenuResponseModel> entityToResponseModelList(List<Menu> menus);
 
+    //TODO fic menu links
     @AfterMapping
-    default void addLinks(@MappingTarget MenuResponseModel menuResponseModel, Menu menu) {
-        Link selfLink = linkTo(methodOn(RestaurantController.class)
-                .getMenusInRestaurantById(menuResponseModel.getRestaurantId(),menuResponseModel.getMenuId()))
-                .withSelfRel();
+    default void addLinks(@MappingTarget MenuResponseModel menuResponseModel, Menu  menu) {
+
+        URI baseUri = URI.create("http://localhost:8080");
+
+        Link selfLink = Link.of(
+                ServletUriComponentsBuilder
+                        .fromUri(baseUri)
+                        .pathSegment("api", "v1", "restaurants/" + menuResponseModel.getRestaurantId() +"/menus/", menuResponseModel.getMenuId())
+                        .toUriString(),
+                "self");
+
+        Link clientLink = Link.of(
+                ServletUriComponentsBuilder
+                        .fromUri(baseUri)
+                        .pathSegment("api", "v1", "restaurants/" + menuResponseModel.getRestaurantId() + "/menus/")
+                        .toUriString(),
+                "allClients");
+
         menuResponseModel.add(selfLink);
-
-        Link restaurantLink = linkTo(methodOn(RestaurantController.class)
-                .getRestaurantsByRestaurantId(menuResponseModel.getRestaurantId()))
-                .withRel("allMenus");
-        menuResponseModel.add(restaurantLink);
-
-        Link menusLink = linkTo(methodOn(RestaurantController.class)
-                .getMenusInRestaurants(menuResponseModel.getRestaurantId(), null))
-                .withRel("allMenusInRestaurant");
-        menuResponseModel.add(menusLink);
-
+        menuResponseModel.add(clientLink);
     }
 }

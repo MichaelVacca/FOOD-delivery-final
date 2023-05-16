@@ -5,9 +5,10 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
+//@EqualsAndHashCode(callSuper = false)
 public class ClientResponseModel extends RepresentationModel<ClientResponseModel> {
+
 
       String clientId;
       String userName;

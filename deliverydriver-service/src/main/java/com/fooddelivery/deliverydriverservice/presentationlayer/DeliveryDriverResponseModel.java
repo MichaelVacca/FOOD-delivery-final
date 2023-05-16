@@ -7,7 +7,6 @@ import lombok.Value;
 import org.springframework.hateoas.RepresentationModel;
 
 @Value
-@Builder
 @AllArgsConstructor
 public class DeliveryDriverResponseModel extends RepresentationModel<DeliveryDriverResponseModel> {
 
