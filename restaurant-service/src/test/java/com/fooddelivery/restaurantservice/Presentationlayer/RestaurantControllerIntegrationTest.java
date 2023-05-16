@@ -333,36 +333,7 @@ public class RestaurantControllerIntegrationTest {
                 });
     }
 
-/*    @Test
-    public void whenAddDuplicateMenuToRestaurant_thenThrowDuplicateMenuIdentifierException() {
-        // Define test data
-        String restaurantId = "validRestaurantId";
-        String duplicateMenuId = "duplicateMenuId";
-        String typeOfMenu = "Type of Menu";
 
-        Items one = new Items("Burger","Grilled hamburger",6.99);
-        Items two = new Items("French Fries","Grilled hamburger",3.99);
-        List<Items> items = new ArrayList<>(Arrays.asList(one,two));
-
-
-        MenuRequestModel menuRequestModel = MenuRequestModel.builder()
-                .menuId(duplicateMenuId)
-                .restaurantId(restaurantId)
-                .typeOfMenu(typeOfMenu)
-                .items(items)
-                .build();
-
-
-        Restaurant mockRestaurant = new Restaurant();  // replace with your Restaurant constructor or builder
-        when(restaurantRepository.findByRestaurantIdentifier_RestaurantId(anyString())).thenReturn(mockRestaurant);
-
-
-        when(menuRepository.save(any(Menu.class))).thenThrow(new DataIntegrityViolationException("constraint [menu_id]"));
-
-        assertThrows(DuplicateMenuIdentifierException.class, () -> {
-            menuService.addMenuToRestaurant(menuRequestModel, restaurantId);
-        });
-    }*/
 
 
     @Test
@@ -440,7 +411,7 @@ public class RestaurantControllerIntegrationTest {
         webTestClient.delete()
                 .uri(BASE_URI_RESTAURANTS + "/" + VALID_RESTAURANT_ID + "/menus/" + VALID_MENU_ID)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isNoContent();
 
 
     }
@@ -470,7 +441,7 @@ public class RestaurantControllerIntegrationTest {
         webTestClient.delete()
                 .uri(BASE_URI_RESTAURANTS + "/" + restaurantId + "/menus/" + invalidMenuId)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isNoContent();
     }
 
     private MenuRequestModel createNewMenuRequestModel(String restaurantId, String menuId,String typeOfMenu) {
