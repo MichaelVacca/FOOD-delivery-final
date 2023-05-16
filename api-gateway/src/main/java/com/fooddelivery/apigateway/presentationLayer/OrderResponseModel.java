@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class OrderResponseModel {
+public class OrderResponseModel extends RepresentationModel<OrderResponseModel> {
     private String orderId;
     private String clientId;
     private String restaurantId;

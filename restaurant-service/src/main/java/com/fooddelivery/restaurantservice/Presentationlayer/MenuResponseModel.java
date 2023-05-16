@@ -12,7 +12,7 @@ import java.util.List;
 
 @Value
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class MenuResponseModel extends RepresentationModel<MenuResponseModel> {
       String restaurantId;
       String menuId;

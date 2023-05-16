@@ -8,7 +8,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Value
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class ClientResponseModel extends RepresentationModel<ClientResponseModel> {
 
     private final String clientId;

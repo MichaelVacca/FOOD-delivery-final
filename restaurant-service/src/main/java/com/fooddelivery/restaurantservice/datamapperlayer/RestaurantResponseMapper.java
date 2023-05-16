@@ -27,16 +27,16 @@ public interface RestaurantResponseMapper {
     List<RestaurantResponseModel> entityToResponseModelList(List<Restaurant> restaurants);
 
     @AfterMapping
-    default void addLinks(@MappingTarget RestaurantResponseModel restaurantResponseModel, Restaurant restaurant) {
+    default void addLinks(@MappingTarget RestaurantResponseModel model, Restaurant restaurant) {
         Link selfLink = linkTo(methodOn(RestaurantController.class)
-                .getRestaurantsByRestaurantId(restaurantResponseModel.getRestaurantId()))
+                .getRestaurantsByRestaurantId(model.getRestaurantId()))
                 .withSelfRel();
-        restaurantResponseModel.add(selfLink);
+        model.add(selfLink);
 
         Link restaurantLink = linkTo(methodOn(RestaurantController.class)
                 .getRestaurants())
                 .withRel("allRestaurants");
-        restaurantResponseModel.add(restaurantLink);
+        model.add(restaurantLink);
     }
 
 

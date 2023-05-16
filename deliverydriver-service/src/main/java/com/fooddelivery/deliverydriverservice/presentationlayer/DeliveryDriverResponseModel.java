@@ -8,7 +8,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Value
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class DeliveryDriverResponseModel extends RepresentationModel<DeliveryDriverResponseModel> {
 
     private final String deliveryDriverId;

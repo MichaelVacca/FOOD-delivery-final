@@ -8,7 +8,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Value
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class RestaurantResponseModel extends RepresentationModel<RestaurantResponseModel> {
     private final String restaurantId;
     private final String restaurantName;

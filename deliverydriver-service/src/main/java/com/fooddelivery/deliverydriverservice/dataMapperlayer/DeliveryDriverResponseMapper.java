@@ -29,16 +29,16 @@ public interface DeliveryDriverResponseMapper {
     List<DeliveryDriverResponseModel> entityListToResponseModelList(List<DeliveryDriver> deliveryDrivers);
 
     @AfterMapping
-    default void addLinks(@MappingTarget DeliveryDriverResponseModel deliveryDriverResponseModel, DeliveryDriver deliveryDriver) {
+    default void addLinks(@MappingTarget DeliveryDriverResponseModel model, DeliveryDriver deliveryDriver) {
 
         Link selfLink = linkTo(methodOn(DeliveryDriverController.class)
-                .getDeliveryDriversById(deliveryDriverResponseModel.getDeliveryDriverId()))
+                .getDeliveryDriversById(model.getDeliveryDriverId()))
                 .withSelfRel();
-        deliveryDriverResponseModel.add(selfLink);
+        model.add(selfLink);
 
         Link deliveryDriverLink = linkTo(methodOn(DeliveryDriverController.class)
                 .getDeliveryDrivers())
                 .withRel("allDeliveryDrivers");
-        deliveryDriverResponseModel.add(deliveryDriverLink);
+        model.add(deliveryDriverLink);
     }
 }
