@@ -103,39 +103,6 @@ import static org.mockito.Mockito.mock;
 
     }
 
-/*    @Test
-    public void testUpdateMenuInRestaurant() {
-        // Create a new restaurant entity and save it
-        Restaurant restaurant = new Restaurant();
-        restaurant.setRestaurantName("Test Restaurant");
-        restaurant.setRestaurantIdentifier(new RestaurantIdentifier());
-
-        restaurantRepository.save(restaurant);
-
-        // Create a new menu entity and save it
-        Menu menu = new Menu();
-        menu.setTypeOfMenu("Test Menu");
-        menu.setTypeOfMenu("Seafood");
-        menu.setRestaurantIdentifier(restaurant.getRestaurantIdentifier());
-        menu.setMenuIdentifier(new MenuIdentifier("test-menu"));
-        Items one = new Items("Burger","Grilled hamburger",6.99);
-        Items two = new Items("French Fries","Grilled hamburger",3.99);
-        List<Items> items = new ArrayList<>(Arrays.asList(one,two));
-        menuRepository.save(menu);
-
-        // Create a new MenuRequestModel to update the menu
-        MenuRequestModel requestModel = new MenuRequestModel(menu.getMenuIdentifier().toString(),restaurant.getRestaurantIdentifier().getRestaurantId(), menu.getTypeOfMenu(), items);
-
-        // Call the updateMenuInRestaurant method with the restaurant and menu IDs and the request model
-        MenuResponseModel responseModel = menuService.updateMenuInRestaurant(requestModel, restaurant.getRestaurantIdentifier().getRestaurantId(), menu.getMenuIdentifier().getMenuId());
-
-        // Assert that the response model contains the expected data
-        assertEquals("Fish", responseModel.getTypeOfMenu());
-        assertEquals(restaurant.getRestaurantIdentifier().getRestaurantId(), responseModel.getRestaurantId());
-        assertEquals(menu.getMenuIdentifier().getMenuId(), responseModel.getMenuId());
-    }*/
-
-
     private Menu createNewMenu(RestaurantIdentifier restaurantIdentifier, String menuID){
         MenuIdentifier menuIdentifier  = new MenuIdentifier(menuID);
         Items one = new Items("Burger","Grilled hamburger",6.99);
@@ -144,41 +111,5 @@ import static org.mockito.Mockito.mock;
 
         return new Menu(menuIdentifier, "Burgers", items);
     }
-    //@Test
-    /*public void testGetMenusInRestaurantsByField() {
-        // Create a test menu
-        Menu menu = new Menu(
-                new MenuIdentifier("menu1"),
-                "Pizza",
-                Arrays.asList(new Items("item1", "description1", 10.0))
-        );
-
-        // Set up the behavior of the mock repository
-        when(menuRepository.findByMenuIdentifier_MenuId("restaurant1")).thenReturn(true);
-        when(menuRepository.findByMenuIdentifier_MenuId("menu1")).thenReturn(Optional.of(menu));
-
-        // Set up the behavior of the mock mapper
-        List<MenuResponseModel> menuResponseModels = Arrays.asList(
-                new MenuResponseModel("menu1", "Pizza")
-        );
-        when(menuResponseMapper.entityToResponseModelList(anyList())).thenReturn(menuResponseModels);
-
-        // Call the method with valid input
-        Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("typeOfMenu", "Pizza");
-        List<MenuResponseModel> result = menuService.getMenusInRestaurantsByField("restaurant1", queryParams);
-
-        // Assert the output
-        assertEquals(1, result.size());
-        assertEquals("menu1", result.get(0).getMenuId());
-        assertEquals("Pizza", result.get(0).getTypeOfMenu());
-
-        // Call the method with invalid input
-        assertThrows(NotFoundException.class, () -> {
-            menuService.getMenusInRestaurantsByField("invalid-restaurant", queryParams);
-        });
-    }*/
-
-
 
 }

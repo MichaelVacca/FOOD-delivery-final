@@ -36,14 +36,14 @@ public interface MenuResponseMapper {
         Link selfLink = Link.of(
                 ServletUriComponentsBuilder
                         .fromUri(baseUri)
-                        .pathSegment("api", "v1", "restaurants/" + menuResponseModel.getRestaurantId() +"/menus/", menuResponseModel.getMenuId())
+                        .pathSegment("api", "v1", "restaurants" + menuResponseModel.getRestaurantId() +"menus", menuResponseModel.getMenuId())
                         .toUriString(),
                 "self");
 
         Link clientLink = Link.of(
                 ServletUriComponentsBuilder
                         .fromUri(baseUri)
-                        .pathSegment("api", "v1", "restaurants/" + menuResponseModel.getRestaurantId() + "/menus/")
+                        .pathSegment("api", "v1", "restaurants" + menuResponseModel.getRestaurantId() + "menus")
                         .toUriString(),
                 "allClients");
 

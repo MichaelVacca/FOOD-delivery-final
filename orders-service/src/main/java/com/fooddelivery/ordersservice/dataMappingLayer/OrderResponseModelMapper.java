@@ -32,14 +32,14 @@ public interface OrderResponseModelMapper {
         Link selfLink = Link.of(
                 ServletUriComponentsBuilder
                         .fromUri(baseUri)
-                        .pathSegment("api", "v1", "orders", orderResponseModel.getOrderId())
+                        .pathSegment("api", "v1", "clients", orderResponseModel.getClientId(),"orders",orderResponseModel.getOrderId())
                         .toUriString(),
                 "self");
 
         Link clientLink = Link.of(
                 ServletUriComponentsBuilder
                         .fromUri(baseUri)
-                        .pathSegment("api", "v1", "orders")
+                        .pathSegment("api", "v1", "clients", orderResponseModel.getClientId(),"orders")
                         .toUriString(),
                 "allOrders");
 
