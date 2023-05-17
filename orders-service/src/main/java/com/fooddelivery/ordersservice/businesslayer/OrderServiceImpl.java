@@ -48,8 +48,8 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException("Delivery driver not found with id : " + orderRequestModel.getDeliveryDriverId());
         }
 
-        RestaurantMenuResponseModel menuResponseModel = restaurantServiceClient.getMenuByMenuId1(orderRequestModel.getRestaurantId(), orderRequestModel.getMenuId());
-        if(menuResponseModel == null){
+        RestaurantMenuResponseModel restaurantMenuResponseModel = restaurantServiceClient.getMenuByMenuId1(orderRequestModel.getRestaurantId(), orderRequestModel.getMenuId());
+        if(restaurantMenuResponseModel == null){
             throw new NotFoundException("Menu not found with id : " + orderRequestModel.getMenuId());
         }
 
@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = Order.builder()
                 .orderIdentifier(new OrderIdentifier())
                 .restaurantIdentifier(new RestaurantIdentifier(restaurantResponseModel.getRestaurantId()))
-                .menuIdentifier(new MenuIdentifier(menuResponseModel.getMenuId()))
+                .menuIdentifier(new MenuIdentifier(restaurantMenuResponseModel.getMenuId()))
                 .clientIdentifier(new ClientIdentifier(clientResponseModel.getClientId()))
                 .deliveryDriverIdentifier(new DeliveryDriverIdentifier(deliveryDriverResponseModel.getDeliveryDriverId()))
                 .driverFirstName(deliveryDriverResponseModel.getFirstName())
@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
                 .orderStatus(orderRequestModel.getOrderStatus())
                 .items(orderRequestModel.getItems())
                 .restaurantName(restaurantResponseModel.getRestaurantName())
-                .typeOfMenu(menuResponseModel.getTypeOfMenu())
+                .typeOfMenu(restaurantMenuResponseModel.getTypeOfMenu())
                 .estimatedDeliveryTime(orderRequestModel.getEstimatedDeliveryTime())
 
                 .orderDate(orderRequestModel.getOrderDate())
@@ -89,21 +89,16 @@ public class OrderServiceImpl implements OrderService {
                 }
 
         MenuRequestModel menuRequestModel = MenuRequestModel.builder()
-                .restaurantId(menuResponseModel.getRestaurantId())
-                .menuId(menuResponseModel.getMenuId())
-                .typeOfMenu(menuResponseModel.getTypeOfMenu())
+                .restaurantId(restaurantMenuResponseModel.getRestaurantId())
+                .menuId(restaurantMenuResponseModel.getMenuId())
+                .typeOfMenu(restaurantMenuResponseModel.getTypeOfMenu())
                 .items(orderRequestModel.getItems())
                 .totalPrice(orderRequestModel.getTotalPrice())
                 .build();
 
-            if (orderRequestModel.getItems() == null) {
-                throw new NoItemsException("No items in order");
-            }
-            if (orderRequestModel.getItems().isEmpty()) {
-                throw new NoItemsException("No items in order");
-            }
-
-
+        if (orderRequestModel.getItems() == null || orderRequestModel.getItems().isEmpty()) {
+            throw new NoItemsException("No items in order");
+        }
 
                 restaurantServiceClient.modifyMenuInRestaurant(menuRequestModel.getRestaurantId(), menuRequestModel.getMenuId(),menuRequestModel);
                 return orderResponseModelMapper.entityToResponseModel(saved);

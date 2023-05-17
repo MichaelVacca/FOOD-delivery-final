@@ -11,6 +11,9 @@ public class OrderIdentifier {
     public OrderIdentifier() {
         this.orderId = UUID.randomUUID().toString();
     }
+    public OrderIdentifier(String orderId) {
+        this.orderId = orderId;
+    }
     public String getOrderId() {
         return orderId;
     }

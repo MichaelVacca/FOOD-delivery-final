@@ -27,20 +27,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class ClientOrderControllerTest {
-    @LocalServerPort
-    private int port;
+    //@LocalServerPort
+    private String port = "8080/";
 
     @Autowired
     RestTemplate restTemplate;
 
     @MockBean
     OrderServiceClient orderServiceClient;
-    private MockRestServiceServer mockRestServiceServer;
     @Autowired
     private MockMvc mockMvc;
-
-    @MockBean
-    private RestTemplate restTemplate1;
 
 
     private ObjectMapper objectMapper = new ObjectMapper();

@@ -2,16 +2,17 @@ package com.fooddelivery.ordersservice.datalayer;
 
 
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
 
-
+@EqualsAndHashCode
 public class Items {
 private String itemName;
 private String itemDesc;
 private Double itemCost;
 
-Items(){
+public Items(){
 
 }
 

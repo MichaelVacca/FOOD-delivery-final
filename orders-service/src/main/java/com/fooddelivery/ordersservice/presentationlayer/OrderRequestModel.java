@@ -3,11 +3,12 @@ package com.fooddelivery.ordersservice.presentationlayer;
 import com.fooddelivery.ordersservice.datalayer.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@Data
 @Builder
 @AllArgsConstructor
 @Value
