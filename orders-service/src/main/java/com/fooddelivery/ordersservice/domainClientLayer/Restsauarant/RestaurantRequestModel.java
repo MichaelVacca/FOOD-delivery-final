@@ -1,9 +1,14 @@
 package com.fooddelivery.ordersservice.domainClientLayer.Restsauarant;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Value;
 import org.springframework.hateoas.RepresentationModel;
 
+@Value
 @Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RestaurantRequestModel extends RepresentationModel<RestaurantRequestModel> {
     String restaurantName;
     String countryName;
@@ -12,7 +17,7 @@ public class RestaurantRequestModel extends RepresentationModel<RestaurantReques
     String cityName;
     String postalCode;
 
-    public RestaurantRequestModel() {
+/*    public RestaurantRequestModel() {
     }
 
     public RestaurantRequestModel(String restaurantName, String countryName, String streetName, String provinceName, String cityName, String postalCode) {
@@ -70,5 +75,5 @@ public class RestaurantRequestModel extends RepresentationModel<RestaurantReques
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
+    }*/
 }

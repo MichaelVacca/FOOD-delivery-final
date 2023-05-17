@@ -23,6 +23,7 @@ public class ClientOrderController {
                 .body(orderService.getAllOrdersAggregateByClientId(clientId));
     }
 
+
     @GetMapping("/{orderId}")
     ResponseEntity<OrderResponseModel> getOrderById(@PathVariable String clientId, @PathVariable String orderId) {
         return ResponseEntity.status(HttpStatus.OK)

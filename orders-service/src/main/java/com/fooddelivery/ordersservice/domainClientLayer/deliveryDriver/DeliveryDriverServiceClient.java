@@ -38,7 +38,7 @@ public class DeliveryDriverServiceClient {
         this.DELIVERY_DRIVER_SERVICE_BASE_URL = "http://" + deliveryDriverServiceHost + ":" + deliveryDriverServicePort + "/api/v1/deliveryDrivers";
     }
 
-    public DeliveryDriverResponseModel[] getAllDeliveryDriversAggregate() {
+/*    public DeliveryDriverResponseModel[] getAllDeliveryDriversAggregate() {
         DeliveryDriverResponseModel[] deliveryDriverResponseModels;
         try {
             String url = DELIVERY_DRIVER_SERVICE_BASE_URL;
@@ -49,7 +49,7 @@ public class DeliveryDriverServiceClient {
             throw handleHttpClientException(ex);
         }
         return deliveryDriverResponseModels;
-    }
+    }*/
 
 
     public DeliveryDriverResponseModel getDeliveryDrivers(String deliveryDriverId) {
@@ -67,7 +67,7 @@ public class DeliveryDriverServiceClient {
         return deliveryDriverResponseModel;
     }
 
-    public DeliveryDriverResponseModel addDeliveryDriver(DeliveryDriverRequestModel deliveryDriverRequestModel) {
+/*    public DeliveryDriverResponseModel addDeliveryDriver(DeliveryDriverRequestModel deliveryDriverRequestModel) {
 
         DeliveryDriverResponseModel deliveryDriverResponseModel;
         try {
@@ -80,9 +80,9 @@ public class DeliveryDriverServiceClient {
             throw handleHttpClientException(ex);
         }
         return deliveryDriverResponseModel;
-    }
+    }*/
 
-    public void updateDeliveryDriver(String deliveryDriverId, DeliveryDriverRequestModel deliveryDriverRequestModel) {
+/*    public void updateDeliveryDriver(String deliveryDriverId, DeliveryDriverRequestModel deliveryDriverRequestModel) {
         try {
             String url = DELIVERY_DRIVER_SERVICE_BASE_URL + "/" + deliveryDriverId;
             restTemplate.execute(url, HttpMethod.PUT, requestCallback(deliveryDriverRequestModel), clientHttpResponse -> null);
@@ -91,9 +91,9 @@ public class DeliveryDriverServiceClient {
             log.debug("5.");
             throw handleHttpClientException(ex);
         }
-    }
+    }*/
 
-    public void deleteDeliveryDriver(String deliveryDriverId) {
+/*    public void deleteDeliveryDriver(String deliveryDriverId) {
         try {
             String url = DELIVERY_DRIVER_SERVICE_BASE_URL + "/" + deliveryDriverId;
             restTemplate.execute(url, HttpMethod.DELETE, null, null);
@@ -102,15 +102,15 @@ public class DeliveryDriverServiceClient {
             log.debug("5.");
             throw handleHttpClientException(ex);
         }
-    }
-    private RequestCallback requestCallback(final DeliveryDriverRequestModel deliveryDriverRequestModel) {
+    }*/
+/*    private RequestCallback requestCallback(final DeliveryDriverRequestModel deliveryDriverRequestModel) {
         return clientHttpRequest -> {
             ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(clientHttpRequest.getBody(), deliveryDriverRequestModel);
             clientHttpRequest.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
             clientHttpRequest.getHeaders().add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         };
-    }
+    }*/
         private RuntimeException handleHttpClientException(HttpClientErrorException ex) {
             if (ex.getStatusCode() == NOT_FOUND) {
                 return new NotFoundException(getErrorMessage(ex));

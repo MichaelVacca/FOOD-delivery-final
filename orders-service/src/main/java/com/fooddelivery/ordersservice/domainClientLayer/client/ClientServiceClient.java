@@ -36,7 +36,7 @@ public class ClientServiceClient {
         this.CLIENT_SERVICE_BASE_URL = "http://" + clientServiceHost + ":" + clientServicePort + "/api/v1/clients";
     }
 
-    public ClientResponseModel[] getAllClientsAggregate() {
+/*    public ClientResponseModel[] getAllClientsAggregate() {
         ClientResponseModel[] clientResponseModels;
 
             String url = CLIENT_SERVICE_BASE_URL;
@@ -44,7 +44,7 @@ public class ClientServiceClient {
             log.debug("5. Received in API-Gateway Client Service Client getAllClientsAggregate");
 
         return clientResponseModels;
-    }
+    }*/
 
     public ClientResponseModel getClient(String clientId) {
         ClientResponseModel clientResponseModel;
@@ -61,7 +61,7 @@ public class ClientServiceClient {
         return clientResponseModel;
     }
 
-    public ClientResponseModel addClient(ClientRequestModel clientRequestModel) {
+    /*public ClientResponseModel addClient(ClientRequestModel clientRequestModel) {
         ClientResponseModel clientResponseModel;
         try {
             String url = CLIENT_SERVICE_BASE_URL;
@@ -75,7 +75,7 @@ public class ClientServiceClient {
         }
         return clientResponseModel;
     }
-/*    public void updateClient(String clientId, ClientRequestModel clientRequestModel) {
+*//*    public void updateClient(String clientId, ClientRequestModel clientRequestModel) {
         try{
             String url = CLIENT_SERVICE_BASE_URL + "/" + clientId;
                     restTemplate.put(url, clientRequestModel, ClientResponseModel.class);
@@ -85,7 +85,7 @@ public class ClientServiceClient {
             log.debug("5.");
             throw handleHttpClientException(ex);
         }
-    }*/
+    }*//*
 
     public void updateClient(String clientId, ClientRequestModel clientRequestModel) {
         try{
@@ -97,10 +97,10 @@ public class ClientServiceClient {
             log.debug("5.");
             throw handleHttpClientException(ex);
         }
-    }
+    }*/
 
 
-
+/*
     private RequestCallback requestCallback(final ClientRequestModel clientRequestModel) {
         return clientHttpRequest -> {
             ObjectMapper mapper = new ObjectMapper();
@@ -111,7 +111,7 @@ public class ClientServiceClient {
     }
 
 
-/*    public void deleteClient(String clientId) {
+    public void deleteClient(String clientId) {
         try{
             String url = CLIENT_SERVICE_BASE_URL + "/" + clientId;
             restTemplate.delete(url);
@@ -122,7 +122,7 @@ public class ClientServiceClient {
             throw handleHttpClientException(ex);
         }
     }*/
-public void deleteClient(String clientId) {
+/*public void deleteClient(String clientId) {
     try{
         String url = CLIENT_SERVICE_BASE_URL + "/" + clientId;
         restTemplate.execute(url, HttpMethod.DELETE, null, null);
@@ -132,7 +132,7 @@ public void deleteClient(String clientId) {
         log.debug("5.");
         throw handleHttpClientException(ex);
     }
-}
+}*/
 
 
     private RuntimeException handleHttpClientException(HttpClientErrorException ex) {

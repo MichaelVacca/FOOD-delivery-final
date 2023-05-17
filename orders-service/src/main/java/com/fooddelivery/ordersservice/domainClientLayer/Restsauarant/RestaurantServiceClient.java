@@ -38,7 +38,7 @@ public class RestaurantServiceClient {
 
     }
 
-    public RestaurantResponseModel[] getAllRestaurantsAggregate() {
+/*    public RestaurantResponseModel[] getAllRestaurantsAggregate() {
         RestaurantResponseModel[] restaurantResponseModels;
         try{
             String url = RESTAURANT_SERVICE_BASE_URL;
@@ -50,7 +50,7 @@ public class RestaurantServiceClient {
             throw handleHttpClientException(ex);
         }
         return restaurantResponseModels;
-    }
+    }*/
 
     public RestaurantMenuResponseModel getRestaurantAggregate(String restaurantId){
         RestaurantMenuResponseModel restaurantMenuResponseModel;
@@ -65,7 +65,7 @@ public class RestaurantServiceClient {
         }
         return restaurantMenuResponseModel;
     }
-    public MenuResponseModel getMenuByMenuId(String restaurantId, String menuId){
+/*    public MenuResponseModel getMenuByMenuId(String restaurantId, String menuId){
         try{
             String url = RESTAURANT_SERVICE_BASE_URL + "/" + restaurantId + "/" +"menus" + "/" + menuId;
             MenuResponseModel menuResponseModel = restTemplate.getForObject(url, MenuResponseModel.class);
@@ -74,7 +74,7 @@ public class RestaurantServiceClient {
         catch(HttpClientErrorException ex){
             throw handleHttpClientException(ex);
         }
-    }
+    }*/
 
     public RestaurantMenuResponseModel getMenuByMenuId1(String restaurantId, String menuId){
         try{
@@ -88,7 +88,7 @@ public class RestaurantServiceClient {
     }
 
 
-    public RestaurantResponseModel addRestaurantAggregate(RestaurantRequestModel restaurantRequestModel){
+/*    public RestaurantResponseModel addRestaurantAggregate(RestaurantRequestModel restaurantRequestModel){
         RestaurantResponseModel restaurantResponseModel;
 
             String url = RESTAURANT_SERVICE_BASE_URL;
@@ -97,17 +97,17 @@ public class RestaurantServiceClient {
             log.debug("5. Received in API_Gateway Restaurant Service Client addRestaurantAggregate with name: " + restaurantRequestModel.getRestaurantName());
 
 
-/*        catch(HttpClientErrorException ex){
+*//*        catch(HttpClientErrorException ex){
             log.debug("5.");
             throw handleHttpClientException(ex);
-        }*/
+        }*//*
         return restaurantResponseModel;
     }
 
     public void updateRestaurantAggregate(String restaurantId, RestaurantRequestModel restaurantRequestModel){
         try{
             String url = RESTAURANT_SERVICE_BASE_URL + "/" + restaurantId;
-/*            restTemplate.put(url, restaurantRequestModel);*/
+*//*            restTemplate.put(url, restaurantRequestModel);*//*
             restTemplate.execute(url, HttpMethod.PUT,requestCallback(restaurantRequestModel), clientHttpResponse -> null);
 
             log.debug("5. Received in API-Gateway Restaurant Service Client updateRestaurantAggregate with name: " + restaurantRequestModel.getRestaurantName());
@@ -129,7 +129,7 @@ public class RestaurantServiceClient {
         catch(HttpClientErrorException ex){
             throw handleHttpClientException(ex);
         }
-    }
+    }*/
 
     public void modifyMenuInRestaurant(String restaurantId, String menuId, MenuRequestModel menuRequestModel){
         try{
@@ -142,7 +142,7 @@ public class RestaurantServiceClient {
         }
     }
 
-    public void deleteMenuInRestaurant(String restaurantId, String menuId){
+/*    public void deleteMenuInRestaurant(String restaurantId, String menuId){
         try{
             String url = RESTAURANT_SERVICE_BASE_URL + "/" + restaurantId + "/menus/" + menuId;
             restTemplate.execute(url, HttpMethod.DELETE,null, null);
@@ -164,8 +164,8 @@ public class RestaurantServiceClient {
             log.debug("5. failed in delete restaurant");
             throw handleHttpClientException(ex);
         }
-    }
-
+    }*/
+/*
     private RequestCallback requestCallback(final RestaurantRequestModel restaurantRequestModel) {
         return clientHttpRequest -> {
             ObjectMapper mapper = new ObjectMapper();
@@ -174,6 +174,7 @@ public class RestaurantServiceClient {
             clientHttpRequest.getHeaders().add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         };
     }
+    */
     private RequestCallback requestCallbackMenu(final MenuRequestModel menuRequestModel) {
         return clientHttpRequest -> {
             ObjectMapper mapper = new ObjectMapper();

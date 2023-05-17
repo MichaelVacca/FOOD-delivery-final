@@ -1,9 +1,11 @@
 package com.fooddelivery.ordersservice.domainClientLayer.client;
 
-import lombok.Builder;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
+@Value
 @Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ClientRequestModel extends RepresentationModel<ClientRequestModel> {
 
      String userName;
@@ -18,7 +20,7 @@ public class ClientRequestModel extends RepresentationModel<ClientRequestModel> 
      String postalCode;
 
 
-    public ClientRequestModel() {
+    /*public ClientRequestModel() {
     }
 
     public ClientRequestModel(String userName, String password, String age, String emailAddress, String phoneNumber, String countryName, String streetName, String cityName, String provinceName, String postalCode) {
@@ -112,5 +114,5 @@ public class ClientRequestModel extends RepresentationModel<ClientRequestModel> 
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
+    }*/
 }

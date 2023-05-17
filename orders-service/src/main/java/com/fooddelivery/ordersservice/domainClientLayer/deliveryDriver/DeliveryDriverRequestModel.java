@@ -1,9 +1,11 @@
 package com.fooddelivery.ordersservice.domainClientLayer.deliveryDriver;
 
-import lombok.Builder;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
+@Value
 @Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class DeliveryDriverRequestModel extends RepresentationModel<DeliveryDriverRequestModel> {
 
      String firstName;
@@ -17,7 +19,7 @@ public class DeliveryDriverRequestModel extends RepresentationModel<DeliveryDriv
      String provinceName;
      String postalCode;
 
-    public DeliveryDriverRequestModel() {
+/*    public DeliveryDriverRequestModel() {
     }
 
     public DeliveryDriverRequestModel(String firstName, String lastName, String dateOfBirth, String description, String employeeSince, String countryName, String streetName, String cityName, String provinceName, String postalCode) {
@@ -111,7 +113,7 @@ public class DeliveryDriverRequestModel extends RepresentationModel<DeliveryDriv
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
+    }*/
 }
 
 
