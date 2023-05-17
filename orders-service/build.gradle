@@ -42,6 +42,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas' // added for HATEOAS from spring initializer
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	implementation 'org.springframework:spring-jdbc:5.3.10'
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",

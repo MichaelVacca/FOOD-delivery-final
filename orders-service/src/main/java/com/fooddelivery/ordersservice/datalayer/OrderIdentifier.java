@@ -1,9 +1,11 @@
 package com.fooddelivery.ordersservice.datalayer;
 
+import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.util.UUID;
 
+@EqualsAndHashCode
 public class OrderIdentifier {
     @Indexed(unique = true)
     private String orderId;

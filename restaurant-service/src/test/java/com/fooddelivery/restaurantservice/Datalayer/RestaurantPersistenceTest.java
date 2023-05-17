@@ -100,25 +100,6 @@ class RestaurantPersistenceTest {
 
     }
 
-/*    @Test
-    public void getRestaurantsById_withNonExistingRestaurantId_shouldThrowNotFoundException(){
-        //arrange
-        String nonExistingId = "invalid-restaurant-id";
-
-        //act and assert
-        Exception exception = assertThrows(NotFoundException.class, () -> {
-            restaurantService.getRestaurantsById(nonExistingId);
-        });
-
-        String expectedMessage = "Restaurant with id: " + nonExistingId +" not found.";
-        String actualMessage = exception.getMessage();
-
-        assertEquals(expectedMessage, actualMessage);
-    }*/
-
-
-
-
     @Test
     public void existsByInvalidRestaurantIdentifier_RestaurantId_shouldReturnTrue(){
 
@@ -135,9 +116,5 @@ class RestaurantPersistenceTest {
 
         assertFalse(found);
     }
-
-
-
-
 
 }

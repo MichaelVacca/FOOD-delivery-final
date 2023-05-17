@@ -7,6 +7,7 @@ INSERT INTO clients(client_id, user_name, password, age, email_address, phone_nu
 INSERT INTO clients(client_id, user_name, password, age, email_address, phone_number, country_name, street_name, city_name, province_name, postal_code) values ('bb32615a-71d2-4250-9a38-cf205103a4e9','ahulks3','Y5iXVhGyJTp','71','raujean3@bigcartel.com','(601) 7051122','Canada','Northport','New-Richmond','Québec','J7R-2Y5');
 INSERT INTO clients(client_id, user_name, password, age, email_address, phone_number, country_name, street_name, city_name, province_name, postal_code) values ('081f97bb-55bc-4472-95c8-18055ce0b806','ghellmer4','7DUpdOCRt','89','bcauley4@hibu.com','(848) 3713699	','Canada','Kings','Bromont','Québec','J2L-2K1');
 
+INSERT INTO clients(client_id, user_name, password, age, email_address, phone_number, country_name, street_name, city_name, province_name, postal_code) values('df0b37ca-0f93-4830-8fd0-07239a7c3d46','clientToBeDeleted','password','21','cliendDel@gmailcom','(123) 9872142', 'Canada','41st Street','Montreal','Quebec','128534');
 
 
 
