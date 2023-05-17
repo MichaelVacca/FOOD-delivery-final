@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderController {
     private  OrderService orderService;
 
-    public OrderController(OrderService orderService) {
+/*    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
     @GetMapping(produces = "application/json")
@@ -30,5 +30,5 @@ public class OrderController {
     ResponseEntity<Void> deleteOrder(@PathVariable String orderId) {
         orderService.deleteOrder(orderId);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 }

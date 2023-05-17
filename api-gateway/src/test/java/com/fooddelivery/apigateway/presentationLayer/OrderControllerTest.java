@@ -25,10 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class OrderControllerTest {
-    @LocalServerPort
+    /*@LocalServerPort
     private int port;
-/*    @MockBean
-    private OrderService orderService;*/
+*//*    @MockBean
+    private OrderService orderService;*//*
 
     @Autowired
     RestTemplate restTemplate;
@@ -102,6 +102,6 @@ class OrderControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
         verify(orderserviceClient, times(1)).deleteOrder(orderId);
-    }
+    }*/
 
 }

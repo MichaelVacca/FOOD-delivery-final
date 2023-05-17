@@ -1,13 +1,64 @@
 @startuml
-!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
-title System Context Diagram for Food Delivery Application System
-System(system1, "Food Delivery Application ", "The food delivery application system")
-System(system2, "Client Service", "Allows employees of a restaurant to view their menus, and manage their orders.")
-System(system3, "Delivery Driver Service", "Allows employees of a restaurant to view their menus, and manage their orders.")
-System(system4, "Restaurant Service", "Allows employees of a restaurant to view their menus, and manage their orders.")
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
 
-Rel(system1, system2, "Management of a restaurants clients")
-Rel(system1, system3, "Management of the delivery drivers for the restaurants.")
-Rel(system1, system4, "Ability to manage the restaurants, menus within that restaurant and the items in those menus")
+
+AddElementTag("microservice",  $bgColor="Blue", $fontColor="white", $legendText="Micro Service\neight sided")
+AddElementTag("database", $shape=RoundedBoxShape(), $bgColor="grey", $fontColor="white", $legendText="Databases")
+AddElementTag("website", $shape=RoundedBoxShape(), $bgColor="royalblue", $fontColor="white", $legendText="Single-Page Application")
+AddElementTag("webapp", $shape=RoundedBoxShape(), $bgColor="blue", $fontColor="white", $legendText="Web Application")
+AddRelTag("api_rel", $lineColor="black",$legendText="API-Gateway relationships")
+AddRelTag("database_rel", $lineColor="black",$legendText="Database Relationships")
+AddRelTag("microservice_rel", $lineColor="black",$legendText="Microservice Relationships")
+
+SHOW_PERSON_OUTLINE()
+
+Person(Manager, "Manager", "A restaurant manager who is responsible for managing their restaurant, Viewing and managing its clients and viewing and managing their delivery drivers.")
+
+
+System_Boundary(fooddelivery_boundedcontext, "FoodDelivery System") {
+
+Container(application, "Wep Application", "Spring boot: Java", "Delivers requested data in a single page application format", $tags="webapp")
+Container(webPage, "Single-Page Application", "REACT JS", "GUI which holds the functionalities for the Spring boot application", $tags="website")
+
+Container(api_gateway, "API Gateway", "Spring boot: Java", "Handles HTTP requests and redirects them accordingly to the desired microservice.", $tags="microservice")
+
+Container(clients_service, "Clients-Service","Spring boot: Java","Provides features for managing a client such as creating a new one, updating information and deleting a client",$tags="microservice")
+ContainerDb(clients_db, "Clients-db","MySQL","Stores information relating to clients", $tags="database")
+
+Container(delivery_driver_service, "DeliveryDrivers-Service","Spring boot: Java","Provides features for managing a delivery driver such as creating a new one, updating information and deleting a client", $tags="microservice")
+ContainerDb(deliveryDrivers_db, "DeliveryDrivers-db","MySQL","Stores information relating to DeliveryDrivers", $tags="database")
+
+Container(restaurants_service, "Restaurants-Service","Spring boot: Java","Provides functionalities for managing a restaurant, the menus for that restaurant and the items of each menu. This includes getting, creating a new one, updating and deleting ", $tags="microservice")
+ContainerDb(restaurants_db, "Restaurants-db","MySQL","Stores restaurant, menu and item information", $tags="database")
+
+Container(order_service, "Orders-Service","Spring boot: Java","Provides features for managing orders such as creating a new one, updating an existing one, deleting and getting all or a specific order",$tags="microservice")
+ContainerDb(order_db, "Order-db","MongoDB","Stores information relating to orders", $tags="database")
+
+}
+
+
+Rel(Manager, application, "Visits FoodDelivery.com using", "HTTP")
+Rel(Manager, webPage,"Retrieves information related to the service via GUI")
+
+Rel_R(application, webPage,"Sends data to the client web page (spa)")
+
+Rel(webPage,api_gateway,"Makes API calls to","JSON/HTTP")
+
+Rel_D(api_gateway,clients_service,"Sends request to","JSON/HTTPS",$tags="api_rel")
+Rel_D(api_gateway,delivery_driver_service,"Sends request to","JSON/HTTPS",$tags="api_rel")
+Rel_D(api_gateway,restaurants_service,"Sends request to","JSON/HTTPS",$tags="api_rel")
+Rel_D(api_gateway,order_service,"Sends request to","JSON/HTTPS",$tags="api_rel")
+
+Rel(delivery_driver_service, deliveryDrivers_db,"Reads from and Writes to","JDBC", $tags="database_rel")
+
+Rel(restaurants_service,restaurants_db,"Reads from and Writes to","JDBC", $tags="database_rel")
+
+Rel(clients_service,clients_db,"Reads from and Writes to","JDBC", $tags="database_rel")
+Rel(order_service, delivery_driver_service, "Sends request to/Receives response from", "JSON/HTTPS", $tags="microservice_rel")
+Rel(order_service, restaurants_service, "Sends request to/Receives response from", "JSON/HTTPS", $tags="microservice_rel")
+Rel(order_service, clients_service, "Sends request to/Receives response from", "JSON/HTTPS", $tags="microservice_rel")
+
+Rel(order_service, order_db,"Reads from and Writes to","JDBC", $tags="database_rel")
 SHOW_LEGEND()
 @enduml
